@@ -7,6 +7,7 @@ import { meAction } from "../../redux/auth/actions";
 import { Register } from "../../pages/Register";
 import { useTypedSelector } from "../../redux/hooks";
 import { Loading } from "../Loading";
+import { AuthRoute } from "../AuthRoute/AuthRoute";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -27,9 +28,9 @@ export const App = () => {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route exact path="/register">
+        <AuthRoute exact path="/register">
           <Register />
-        </Route>
+        </AuthRoute>
       </Switch>
     </Router>
   );

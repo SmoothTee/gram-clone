@@ -1,11 +1,14 @@
 import React from "react";
+import { Layout } from "../../components/Layout";
 
 import styles from "./PostFeed.module.css";
 
 export const PostFeed = () => {
   return (
-    <div>
-      <span>Post Feed</span>
-    </div>
+    <Layout>
+      <div className={styles.container}>
+        <span>Post Feed</span>
+      </div>
+    </Layout>
   );
 };

@@ -6,6 +6,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
-  border-bottom: 1px solid var(--grey);
+  padding: 0 4rem;
+  border-bottom: 1px solid var(--darker-grey);
+}
+
+.logo_link {
+  text-decoration: none;
 }

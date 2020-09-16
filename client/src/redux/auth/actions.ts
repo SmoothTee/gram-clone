@@ -16,7 +16,6 @@ import {
 import { AppThunk } from "../types";
 import { clientFetch } from "../../utils/clientFetch";
 import { resetError } from "../error/actions";
-import { hideModal } from "../modal/actions";
 
 const registerRequest = (): AuthActionTypes => ({
   type: REGISTER_REQUEST,
@@ -73,9 +72,7 @@ const meFailure = (error: any): AuthActionTypes => ({
   error,
 });
 
-export const registerAction = <T>(body: T, cb: () => void): AppThunk => async (
-  dispatch
-) => {
+export const registerAction = <T>(body: T): AppThunk => async (dispatch) => {
   try {
     dispatch(registerRequest());
     const { success, res } = await clientFetch<T>("/api/auth/register", {
@@ -84,7 +81,6 @@ export const registerAction = <T>(body: T, cb: () => void): AppThunk => async (
     if (success) {
       dispatch(resetError());
       dispatch(registerSuccess(res.user));
-      cb();
     } else {
       dispatch(registerFailure(res));
     }

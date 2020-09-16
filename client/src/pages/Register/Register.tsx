@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import styles from "./Register.module.css";
 import { Input } from "../../components/Input";
@@ -36,20 +36,31 @@ const schema = yup.object().shape({
 
 export const Register = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const isFetching = useTypedSelector((state) => state.auth.isFetching);
+  const error = useTypedSelector((state) => state.error);
 
-  const { register, handleSubmit, errors, formState } = useForm<IFormInputs>({
+  const { register, handleSubmit, errors, formState, setError } = useForm<
+    IFormInputs
+  >({
     resolver: yupResolver(schema),
     mode: "all",
   });
 
   const onSubmit = (data: IFormInputs) => {
-    dispatch(
-      registerAction<IFormInputs>(data, () => history.replace("/"))
-    );
+    dispatch(registerAction<IFormInputs>(data));
   };
+
+  useEffect(() => {
+    if (error && error.data) {
+      Object.entries(error.data).forEach((err) =>
+        setError(err[0] as keyof IFormInputs, {
+          type: "manual",
+          message: err[1] as string,
+        })
+      );
+    }
+  }, [error, setError]);
 
   return (
     <div className={styles.container}>

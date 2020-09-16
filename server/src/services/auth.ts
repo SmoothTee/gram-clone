@@ -34,7 +34,7 @@ export const register = async (
     // Violates unique constraints.
     if (err.code === '23505') {
       if (err.detail.includes('username')) {
-        const userWithEmail = await db<User>('users')
+        const userWithEmail = await db<User>('user')
           .first()
           .where({ email: data.email });
         if (userWithEmail) {
@@ -58,14 +58,20 @@ export const register = async (
   }
 };
 
-export const login = async (
-  data: Pick<User, 'username' | 'password'>
-): Promise<UserWithoutPassword> => {
-  const { username, password } = data;
-  const user = await db('user').first().where({ username });
+interface LoginData {
+  usernameOrEmail: string;
+  password: string;
+}
+
+export const login = async (data: LoginData): Promise<UserWithoutPassword> => {
+  const { usernameOrEmail, password } = data;
+  const user = await db<User>('user')
+    .first()
+    .where({ username: usernameOrEmail })
+    .orWhere({ email: usernameOrEmail });
   if (!user) {
     throw new AppError(404, 'User not found', {
-      username: 'Username not found',
+      usernameOrEmail: 'Username or Email not found',
     });
   }
   const match = await bcrypt.compare(password, user.password);

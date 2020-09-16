@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
@@ -10,6 +10,9 @@ import { Logo } from "../../components/Logo";
 import { HorizontalDivider } from "../../components/HorizontalDivider";
 import { GithubLogin } from "../../components/GithubLogin";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginAction } from "../../redux/auth/actions";
+import { useTypedSelector } from "../../redux/hooks";
 
 interface IFormInputs {
   usernameOrEmail: string;
@@ -25,11 +28,32 @@ const schema = yup.object().shape({
 });
 
 export const Login = () => {
-  const { register, handleSubmit, errors, formState } = useForm<IFormInputs>({
+  const dispatch = useDispatch();
+
+  const isFetching = useTypedSelector((state) => state.auth.isFetching);
+  const error = useTypedSelector((state) => state.error);
+
+  const { register, handleSubmit, errors, formState, setError } = useForm<
+    IFormInputs
+  >({
     resolver: yupResolver(schema),
     mode: "all",
   });
-  const onSubmit = (data: IFormInputs) => console.log(data);
+
+  const onSubmit = (data: IFormInputs) => {
+    dispatch(loginAction(data));
+  };
+
+  useEffect(() => {
+    if (error && error.data) {
+      Object.entries(error.data).forEach((err) =>
+        setError(err[0] as keyof IFormInputs, {
+          type: "manual",
+          message: err[1] as string,
+        })
+      );
+    }
+  }, [error, setError]);
 
   return (
     <div className={styles.container}>
@@ -58,7 +82,11 @@ export const Login = () => {
             type="password"
             ref={register}
           />
-          <Button type="submit" disabled={!formState.isValid}>
+          <Button
+            type="submit"
+            loading={isFetching}
+            disabled={!formState.isValid}
+          >
             Log In
           </Button>
         </form>

@@ -14,7 +14,7 @@ export const validateSchemas = {
     confirmPassword: Joi.string().required().valid(Joi.ref('password')),
   }),
   login: Joi.object({
-    username: Joi.string().required(),
+    usernameOrEmail: Joi.string().required(),
     password: Joi.string().required(),
   }),
   createCommunity: Joi.object({
