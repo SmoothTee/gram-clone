@@ -36,10 +36,7 @@ const loginRequest = (): AuthActionTypes => ({
   type: LOGIN_REQUEST,
 });
 
-const loginSuccess = (payload: {
-  user: User;
-  memberCommunity: number[];
-}): AuthActionTypes => ({
+const loginSuccess = (payload: User): AuthActionTypes => ({
   type: LOGIN_SUCCESS,
   payload,
 });
@@ -66,10 +63,7 @@ const meRequest = (): AuthActionTypes => ({
   type: ME_REQUEST,
 });
 
-const meSuccess = (payload: {
-  user: User;
-  memberCommunity: number[];
-}): AuthActionTypes => ({
+const meSuccess = (payload: User): AuthActionTypes => ({
   type: ME_SUCCESS,
   payload,
 });
@@ -79,7 +73,9 @@ const meFailure = (error: any): AuthActionTypes => ({
   error,
 });
 
-export const registerAction = <T>(body: T): AppThunk => async (dispatch) => {
+export const registerAction = <T>(body: T, cb: () => void): AppThunk => async (
+  dispatch
+) => {
   try {
     dispatch(registerRequest());
     const { success, res } = await clientFetch<T>("/api/auth/register", {
@@ -87,8 +83,8 @@ export const registerAction = <T>(body: T): AppThunk => async (dispatch) => {
     });
     if (success) {
       dispatch(resetError());
-      dispatch(hideModal());
       dispatch(registerSuccess(res.user));
+      cb();
     } else {
       dispatch(registerFailure(res));
     }
@@ -105,8 +101,7 @@ export const loginAction = <T>(body: T): AppThunk => async (dispatch) => {
     });
     if (success) {
       dispatch(resetError());
-      dispatch(hideModal());
-      dispatch(loginSuccess(res));
+      dispatch(loginSuccess(res.user));
     } else {
       dispatch(loginFailure(res));
     }
@@ -134,7 +129,7 @@ export const meAction = (): AppThunk => async (dispatch) => {
     dispatch(meRequest());
     const { success, res } = await clientFetch("/api/auth/me");
     if (success) {
-      dispatch(meSuccess(res));
+      dispatch(meSuccess(res.user));
     } else {
       dispatch(meFailure(res));
     }

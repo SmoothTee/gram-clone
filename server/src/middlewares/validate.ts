@@ -7,6 +7,7 @@ import { AppError } from '../utils/appError';
 
 export const validateSchemas = {
   register: Joi.object({
+    full_name: Joi.string().required(),
     username: Joi.string().min(2).max(32).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),

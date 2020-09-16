@@ -6,6 +6,7 @@ import { userSerializer } from '../utils/serializer';
 
 export interface User {
   id: number;
+  full_name: string;
   username: string;
   email: string;
   password: string;
@@ -26,7 +27,7 @@ export const register = async (
 
   try {
     const user = (
-      await db<User>('users').insert({ ...rest, password: hashedPassword }, '*')
+      await db<User>('user').insert({ ...rest, password: hashedPassword }, '*')
     )[0];
     return userSerializer(user);
   } catch (err) {
@@ -59,9 +60,9 @@ export const register = async (
 
 export const login = async (
   data: Pick<User, 'username' | 'password'>
-): Promise<{ user: UserWithoutPassword; memberCommunity: number[] }> => {
+): Promise<UserWithoutPassword> => {
   const { username, password } = data;
-  const user = await db('users').first().where({ username });
+  const user = await db('user').first().where({ username });
   if (!user) {
     throw new AppError(404, 'User not found', {
       username: 'Username not found',
@@ -73,25 +74,15 @@ export const login = async (
       password: 'Password is invalid',
     });
   }
-  const memberCommunity = (
-    await db('community_members')
-      .select('community_id')
-      .where({ user_id: user.id })
-  ).map((c) => c.community_id);
-  return { user: userSerializer(user), memberCommunity };
+
+  return userSerializer(user);
 };
 
-export const me = async (
-  userId: number
-): Promise<{ user: UserWithoutPassword; memberCommunity: number[] }> => {
-  const user = await db('users').first().where({ id: userId });
+export const me = async (userId: number): Promise<UserWithoutPassword> => {
+  const user = await db('user').first().where({ id: userId });
   if (!user) {
     throw new AppError(404, 'Invalid session.');
   }
-  const memberCommunity = (
-    await db('community_members')
-      .select('community_id')
-      .where({ user_id: user.id })
-  ).map((c) => c.community_id);
-  return { user: userSerializer(user), memberCommunity };
+
+  return userSerializer(user);
 };

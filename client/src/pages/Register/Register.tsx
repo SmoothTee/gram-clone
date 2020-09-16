@@ -2,18 +2,22 @@ import React from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import styles from "./Register.module.css";
 import { Input } from "../../components/Input";
 import { Logo } from "../../components/Logo";
 import { Button } from "../../components/Button";
+import { useDispatch } from "react-redux";
+import { registerAction } from "../../redux/auth/actions";
+import { useTypedSelector } from "../../redux/hooks";
 
 interface IFormInputs {
   email: string;
   full_name: string;
   username: string;
   password: string;
+  confirmPassword: string;
 }
 
 const schema = yup.object().shape({
@@ -24,15 +28,28 @@ const schema = yup.object().shape({
     .string()
     .required("Password is required")
     .min(6, "Password must have at least 6 characters"),
+  confirmPassword: yup
+    .string()
+    .required("Confirm Password is required")
+    .oneOf([yup.ref("password")], "Passwords must match"),
 });
 
 export const Register = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const isFetching = useTypedSelector((state) => state.auth.isFetching);
+
   const { register, handleSubmit, errors, formState } = useForm<IFormInputs>({
     resolver: yupResolver(schema),
     mode: "all",
   });
 
-  const onSubmit = (data: IFormInputs) => console.log(data);
+  const onSubmit = (data: IFormInputs) => {
+    dispatch(
+      registerAction<IFormInputs>(data, () => history.replace("/"))
+    );
+  };
 
   return (
     <div className={styles.container}>
@@ -80,7 +97,23 @@ export const Register = () => {
             }
             ref={register}
           />
-          <Button type="submit" disabled={!formState.isValid}>
+          <Input
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            error={
+              formState.touched.confirmPassword &&
+              errors.confirmPassword?.message
+                ? errors.confirmPassword?.message
+                : ""
+            }
+            ref={register}
+          />
+          <Button
+            type="submit"
+            loading={isFetching}
+            disabled={!formState.isValid}
+          >
             Register
           </Button>
         </form>

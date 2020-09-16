@@ -37,14 +37,14 @@ export const auth = (state = initialState, action: AuthActionTypes) => {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        session: action.payload.user,
+        session: action.payload,
         isAuthenticated: true,
         isFetching: false,
       };
     case ME_SUCCESS:
       return {
         ...state,
-        session: action.payload.user,
+        session: action.payload,
         isAuthenticated: true,
         isFetching: false,
         didRequest: true,

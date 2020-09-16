@@ -15,6 +15,7 @@ import {
 
 export interface User {
   id: number;
+  full_name: string;
   username: string;
   email: string;
   password: string;
@@ -49,7 +50,7 @@ interface LoginRequestAction {
 
 interface LoginSuccessAction {
   type: typeof LOGIN_SUCCESS;
-  payload: { user: User; memberCommunity: number[] };
+  payload: User;
 }
 
 interface LoginFailureAction {
@@ -76,7 +77,7 @@ interface MeRequestAction {
 
 interface MeSuccessAction {
   type: typeof ME_SUCCESS;
-  payload: { user: User; memberCommunity: number[] };
+  payload: User;
 }
 
 interface MeFailureAction {
