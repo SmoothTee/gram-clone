@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--white);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  border: 1px solid var(--darker-grey);
+  border-radius: 2px;
+  background: white;
+}
+
+.wrapper > *:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.form > button {
+  margin-top: 0.5rem;
+}
+
+.login {
+  font-size: 0.8rem;
+}
+
+.link {
+  font-weight: 700;
+  color: var(--grey);
+  text-decoration: none;
+}
