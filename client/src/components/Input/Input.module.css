@@ -1,0 +1,63 @@
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--darker-grey);
+  border-radius: 3px;
+  background: white;
+  min-width: 16rem;
+}
+
+.container:focus-within {
+  border: 1px solid var(--blue);
+}
+
+.container_error {
+  border-color: var(--red);
+}
+
+.input {
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 3px;
+  border: none;
+  outline: none;
+}
+
+.label {
+  position: absolute;
+  left: 1rem;
+  top: 0.8rem;
+  color: var(--dark-grey);
+  pointer-events: none;
+  transition: top 0.3s ease-in-out;
+}
+
+.error_message {
+  position: absolute;
+  left: 0;
+  bottom: -1rem;
+  font-size: 0.8rem;
+  color: var(--red);
+}
+
+.toggle_password {
+  display: flex;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.toggle_password:hover {
+  cursor: pointer;
+}
+
+.input:not(:placeholder-shown) ~ .label {
+  top: 0.2rem;
+  font-size: 0.8rem;
+}
+
+.input:not(:placeholder-shown).input {
+  padding: 1.2rem 1rem 0.4rem;
+}

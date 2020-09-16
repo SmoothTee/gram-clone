@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  align-items: center;
+  color: var(--blue);
+  pointer-events: none;
+  user-select: none;
+}
+
+.icon {
+  font-size: 2rem;
+}
+
+.text {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-left: 0.3rem;
+}

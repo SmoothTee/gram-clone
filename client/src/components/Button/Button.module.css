@@ -1,0 +1,19 @@
+.button {
+  background: var(--blue);
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.button:hover {
+  cursor: pointer;
+  border-color: black;
+}
+
+.button:disabled {
+  background: var(--darker-grey);
+  border: 1px solid transparent;
+  pointer-events: none;
+  user-select: none;
+}

@@ -1,0 +1,23 @@
+.button {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: var(--grey);
+  color: white;
+  border-radius: 2px;
+  border: none;
+  outline: none;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 2rem;
+}
+
+.text {
+  font-weight: 700;
+  margin-left: 0.3rem;
+}

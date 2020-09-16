@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: var(--darker-grey);
+  width: 100%;
+  border: none;
+}
+
+.text {
+  margin: 0 1rem;
+  font-weight: 700;
+  color: var(--dark-grey);
+}

@@ -24,6 +24,9 @@ body {
 
   --white: rgb(250, 250, 250);
   --grey: rgb(237, 239, 241);
-  --darker-grey: rgb(204, 204, 204);
+  --darker-grey: rgb(219, 219, 219);
   --dark-grey: rgb(128, 128, 128);
+  --grey: rgb(68, 68, 68);
+  --blue: rgb(106, 170, 255);
+  --red: rgb(255, 113, 113);
 }
