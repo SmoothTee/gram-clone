@@ -1,0 +1,22 @@
+.nav_bar {
+  display: flex;
+  align-items: center;
+}
+
+.nav_bar > *:not(:last-child) {
+  margin-right: 2rem;
+}
+
+.link {
+  display: flex;
+  font-size: 1.5rem;
+  color: inherit;
+}
+
+.link:hover {
+  color: var(--blue);
+}
+
+.active {
+  color: var(--blue);
+}

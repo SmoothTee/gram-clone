@@ -7,6 +7,9 @@ export async function up(knex: Knex): Promise<void> {
     table.string('username').unique().notNullable();
     table.string('email').unique().notNullable();
     table.string('password').notNullable();
+    table.string('avatar_url');
+    table.string('website');
+    table.string('bio', 150);
     table.timestamps(true, true);
   });
 }

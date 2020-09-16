@@ -64,7 +64,7 @@ export const Login = () => {
             label="Username or Email"
             name="usernameOrEmail"
             error={
-              formState.touched.usernameOrEmail &&
+              (formState.touched.usernameOrEmail || formState.isSubmitted) &&
               errors.usernameOrEmail?.message
                 ? errors.usernameOrEmail?.message
                 : ""
@@ -75,7 +75,8 @@ export const Login = () => {
             label="Password"
             name="password"
             error={
-              formState.touched.password && errors.password?.message
+              (formState.touched.password || formState.isSubmitted) &&
+              errors.password?.message
                 ? errors.password?.message
                 : ""
             }

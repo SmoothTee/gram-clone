@@ -32,7 +32,7 @@ export const logout = catchError(async (req, res) => {
 });
 
 export const me = catchError(async (req, res) => {
-  const data = await authService.me(req.session.userId);
+  const user = await authService.me(req.session.userId);
 
-  res.json(data);
+  res.json({ user });
 });

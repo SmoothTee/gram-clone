@@ -8,6 +8,9 @@ import { Register } from "../../pages/Register";
 import { useTypedSelector } from "../../redux/hooks";
 import { Loading } from "../Loading";
 import { AuthRoute } from "../AuthRoute/AuthRoute";
+import { Profile } from "../../pages/Profile";
+import { ProtectedRoute } from "../ProtectedRoute/ProtectedRoute";
+import { Settings } from "../../pages/Settings";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -31,6 +34,12 @@ export const App = () => {
         <AuthRoute exact path="/register">
           <Register />
         </AuthRoute>
+        <ProtectedRoute exact path="/profile/:username">
+          <Profile />
+        </ProtectedRoute>
+        <ProtectedRoute exact path="/settings/:action">
+          <Settings />
+        </ProtectedRoute>
       </Switch>
     </Router>
   );
