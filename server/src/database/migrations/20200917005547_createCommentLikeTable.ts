@@ -1,8 +1,8 @@
 import * as Knex from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('comment', (table) => {
-    table.primary(['user_id', 'comment']);
+  return knex.schema.createTable('comment_like', (table) => {
+    table.primary(['user_id', 'comment_id']);
     table
       .integer('user_id')
       .references('id')

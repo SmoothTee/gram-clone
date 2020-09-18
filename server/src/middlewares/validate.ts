@@ -17,16 +17,8 @@ export const validateSchemas = {
     usernameOrEmail: Joi.string().required(),
     password: Joi.string().required(),
   }),
-  createCommunity: Joi.object({
-    name: Joi.string().min(2).max(20).required(),
-  }),
-  becomeMember: Joi.object({
-    communityId: Joi.number().required(),
-  }),
   createPost: Joi.object({
-    community_id: Joi.number().required(),
-    title: Joi.string().max(300).required(),
-    body: Joi.string().max(40000),
+    caption: Joi.string().max(2200).required(),
   }),
   createComment: Joi.object({
     parent_id: Joi.number(),

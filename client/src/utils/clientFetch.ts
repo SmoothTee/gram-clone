@@ -6,7 +6,8 @@ import { RootState, ActionTypes } from "../redux/types";
 
 export const clientFetch = async <T>(
   endpoint: string,
-  { body, ...opts }: RequestInit | { body: T } = {}
+  { body, ...opts }: RequestInit | { body: T } = {},
+  formData: boolean = false
 ) => {
   const fetchOpts: RequestInit = {
     method: body ? "POST" : "GET",
@@ -17,6 +18,11 @@ export const clientFetch = async <T>(
     credentials: "include",
     ...opts,
   };
+
+  if (formData) {
+    fetchOpts.headers = undefined;
+    fetchOpts.body = body as FormData;
+  }
 
   const res = await fetch(endpoint, fetchOpts);
   const resObj = await res.json();

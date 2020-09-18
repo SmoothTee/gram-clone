@@ -10,6 +10,7 @@ export async function up(knex: Knex): Promise<void> {
       .unsigned()
       .notNullable();
     table.enum('media_type', ['video', 'image']).notNullable();
+    table.string('public_id').notNullable();
     table.string('media_url').notNullable();
     table.timestamps(true, true);
   });

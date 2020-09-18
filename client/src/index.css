@@ -30,3 +30,7 @@ body {
   --blue: rgb(106, 170, 255);
   --red: rgb(255, 113, 113);
 }
+
+button {
+  outline: none;
+}

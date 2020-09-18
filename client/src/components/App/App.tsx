@@ -11,6 +11,7 @@ import { AuthRoute } from "../AuthRoute/AuthRoute";
 import { Profile } from "../../pages/Profile";
 import { ProtectedRoute } from "../ProtectedRoute/ProtectedRoute";
 import { Settings } from "../../pages/Settings";
+import { ModalManager } from "../ModalManager";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ export const App = () => {
 
   return (
     <Router>
+      <ModalManager />
       <Switch>
         <Route exact path="/">
           <Home />
