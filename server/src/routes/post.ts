@@ -16,6 +16,7 @@ router
     upload.array('media', 5),
     validate(validateSchemas.createPost, 'body'),
     postController.createPost
-  );
+  )
+  .get(postController.readPosts);
 
 export const post = router;

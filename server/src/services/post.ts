@@ -1,5 +1,7 @@
 import { db } from '../database';
+import { userSerializer } from '../utils/serializer';
 import { uploadFromBuffer } from '../utils/uploadFromBuffer';
+import { User } from './auth';
 
 interface Post {
   id: number;
@@ -47,5 +49,44 @@ export const createPost = async (
 
     return { post, postMedia };
   });
+  return result;
+};
+
+export const readPosts = async () => {
+  const result = db.transaction(async (trx) => {
+    const posts = await trx<Post>('post')
+      .select(
+        'post.*',
+        trx.raw('count(comment.id)::integer as num_of_comments')
+      )
+      .leftJoin('comment', 'comment.post_id', 'post.id')
+      .groupBy('post.id');
+
+    const uniqueUserIds = [...new Set((posts as Post[]).map((p) => p.user_id))];
+    const postIds = posts.map((p) => p.id);
+
+    const users = (
+      await trx<User>('public.user').select().whereIn('id', uniqueUserIds)
+    ).map(userSerializer);
+
+    const postMedia = await trx<PostMedia>('post_media')
+      .select()
+      .whereIn('post_id', postIds);
+
+    const comments = await trx('comment')
+      .with(
+        'cte',
+        trx.raw(
+          'select *, ROW_NUMBER() OVER (PARTITION BY post_id ORDER BY created_at DESC) as rn from comment'
+        )
+      )
+      .select('*')
+      .from('cte')
+      .where('rn', '<', 3)
+      .whereIn('post_id', postIds);
+
+    return { posts, users, postMedia, comments };
+  });
+
   return result;
 };
