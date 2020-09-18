@@ -4,6 +4,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import { auth } from "./auth";
 import { modal } from "./modal";
 import { post } from "./post";
+import { entities } from "./entities";
 import { error } from "./error";
 import { AppReducerParameters } from "./types";
 import { LOGOUT_SUCCESS } from "./auth/constants";
@@ -12,6 +13,7 @@ export const appReducer = combineReducers({
   auth,
   modal,
   post,
+  entities,
   error,
 });
 
