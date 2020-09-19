@@ -1,4 +1,5 @@
 import { db } from '../database';
+import { AppError } from '../utils';
 import { userSerializer } from '../utils/serializer';
 import { uploadFromBuffer } from '../utils/uploadFromBuffer';
 import { User } from './auth';
@@ -16,6 +17,13 @@ interface PostMedia {
   public_id: number;
   media_type: string;
   media_url: string;
+  updated_at: string;
+  created_at: string;
+}
+
+interface PostLike {
+  post_id: number;
+  user_id: number;
   updated_at: string;
   created_at: string;
 }
@@ -52,6 +60,12 @@ export const createPost = async (
   return result;
 };
 
+// : Promise<{
+//   posts: Post[];
+//   users: User[];
+//   postMedia: PostMedia[];
+//   comments: PostComment[];
+// }>
 export const readPosts = async () => {
   const result = db.transaction(async (trx) => {
     const posts = await trx<Post>('post')
@@ -89,4 +103,37 @@ export const readPosts = async () => {
   });
 
   return result;
+};
+
+export const likePost = async (
+  post_id: number,
+  user_id: number
+): Promise<PostLike> => {
+  try {
+    const like = (
+      await db<PostLike>('post_like').insert({ post_id, user_id }, '*')
+    )[0];
+
+    return like;
+  } catch (err) {
+    if (err.code === '23505') {
+      throw new AppError(409, 'You have already liked the post.');
+    } else {
+      throw err;
+    }
+  }
+};
+
+export const unlikePost = async (
+  post_id: number,
+  user_id: number
+): Promise<PostLike> => {
+  const like = (
+    await db<PostLike>('post_like')
+      .del()
+      .where({ post_id, user_id })
+      .returning('*')
+  )[0];
+
+  return like;
 };

@@ -18,5 +18,7 @@ router
     postController.createPost
   )
   .get(postController.readPosts);
+router.post('/like', protect, postController.likePost);
+router.post('/unlike', protect, postController.unlikePost);
 
 export const post = router;
