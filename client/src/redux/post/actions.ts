@@ -5,11 +5,20 @@ import {
   CREATE_POST_FAILURE,
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
+  LIKE_POST_FAILURE,
+  LIKE_POST_REQUEST,
+  LIKE_POST_SUCCESS,
   READ_POSTS_FAILURE,
   READ_POSTS_REQUEST,
   READ_POSTS_SUCCESS,
 } from "./constants";
-import { PostActionTypes, Post, PostMedia, PostComment } from "./types";
+import {
+  PostActionTypes,
+  Post,
+  PostMedia,
+  PostComment,
+  PostLike,
+} from "./types";
 
 const createPostRequest = (): PostActionTypes => ({
   type: CREATE_POST_REQUEST,
@@ -41,8 +50,22 @@ const readPostsSuccess = (data: {
   comments: data.comments,
 });
 
-const readPostsFailure = (error: any) => ({
+const readPostsFailure = (error: any): PostActionTypes => ({
   type: READ_POSTS_FAILURE,
+  error,
+});
+
+const likePostRequest = (): PostActionTypes => ({
+  type: LIKE_POST_REQUEST,
+});
+
+const likePostSuccess = (like: PostLike): PostActionTypes => ({
+  type: LIKE_POST_SUCCESS,
+  like,
+});
+
+const likePostFailure = (error: any): PostActionTypes => ({
+  type: LIKE_POST_FAILURE,
   error,
 });
 
@@ -79,5 +102,23 @@ export const readPostsAction = (): AppThunk => async (dispatch) => {
     }
   } catch (err) {
     dispatch(readPostsFailure(`Failed to read posts: ${err}`));
+  }
+};
+
+export const likePostAction = (postId: number): AppThunk => async (
+  dispatch
+) => {
+  try {
+    dispatch(likePostRequest());
+    const { success, res } = await clientFetch("/api/post/like", {
+      body: { postId },
+    });
+    if (success) {
+      dispatch(likePostSuccess(res.like));
+    } else {
+      dispatch(likePostFailure(res));
+    }
+  } catch (err) {
+    dispatch(likePostFailure(`Failed to like post. ${err}`));
   }
 };

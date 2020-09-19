@@ -26,7 +26,7 @@ export const PostFeed = () => {
       <div className={styles.container}>
         <div className={styles.posts}>
           {postItems.map((pId) => (
-            <PostCard postId={pId} />
+            <PostCard key={pId} postId={pId} />
           ))}
         </div>
       </div>

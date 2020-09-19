@@ -71,10 +71,19 @@ export const readPosts = async () => {
     const posts = await trx<Post>('post')
       .select(
         'post.*',
-        trx.raw('count(comment.id)::integer as num_of_comments')
+        trx.raw('count(comment.id)::integer as num_of_comments'),
+        trx.raw('case when l.count is null then 0 else l.count end as likes')
       )
       .leftJoin('comment', 'comment.post_id', 'post.id')
-      .groupBy('post.id');
+      .leftJoin(
+        trx<PostLike>('post_like')
+          .select('post_id', trx.raw('count(*)::integer'))
+          .groupBy('post_id')
+          .as('l'),
+        'l.post_id',
+        'post.id'
+      )
+      .groupBy('post.id', 'l.count');
 
     const uniqueUserIds = [...new Set((posts as Post[]).map((p) => p.user_id))];
     const postIds = posts.map((p) => p.id);
@@ -134,6 +143,10 @@ export const unlikePost = async (
       .where({ post_id, user_id })
       .returning('*')
   )[0];
+
+  if (!like) {
+    throw new AppError(404, 'You have not liked the post.');
+  }
 
   return like;
 };

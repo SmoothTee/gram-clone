@@ -8,18 +8,20 @@ import { AiOutlineHeart } from "react-icons/ai";
 import styles from "./PostCard.module.css";
 import { MdChatBubbleOutline } from "react-icons/md";
 import { useTypedSelector } from "../../redux/hooks";
+import { useDispatch } from "react-redux";
+import { likePostAction } from "../../redux/post/actions";
 
 interface PostCardProps {
   postId: number;
 }
 
 export const PostCard = ({ postId }: PostCardProps) => {
+  const dispatch = useDispatch();
+
   const { users, posts, postMedia, comments } = useTypedSelector(
     (state) => state.entities
   );
   const mediaByPostId = useTypedSelector((state) => state.postMedia.byPostId);
-
-  const likes = 1;
 
   const post = posts.byId[postId];
   const user = users.byId[post.user_id];
@@ -52,7 +54,10 @@ export const PostCard = ({ postId }: PostCardProps) => {
       </Carousel>
       <div className={styles.main}>
         <div className={styles.icons}>
-          <button className={styles.icon_button}>
+          <button
+            className={styles.icon_button}
+            onClick={() => dispatch(likePostAction(postId))}
+          >
             <AiOutlineHeart />
           </button>
           <button className={styles.icon_button}>
@@ -63,7 +68,7 @@ export const PostCard = ({ postId }: PostCardProps) => {
           </button>
         </div>
         <span className={styles.likes}>
-          {likes} like{likes === 1 ? "" : "s"}
+          {post.likes} like{post.likes === 1 ? "" : "s"}
         </span>
         <div className={styles.caption_container}>
           <Link className={styles.username} to={`/profile/${user.username}`}>

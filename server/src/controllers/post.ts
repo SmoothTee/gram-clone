@@ -33,9 +33,5 @@ export const unlikePost = catchError(async (req, res) => {
     req.session.userId
   );
 
-  if (!like) {
-    throw new AppError(404, 'You have not liked the post.');
-  }
-
   res.json({ like });
 });
