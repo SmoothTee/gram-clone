@@ -66,9 +66,9 @@ export const createPost = async (
 //   postMedia: PostMedia[];
 //   comments: PostComment[];
 // }>
-export const readPosts = async () => {
+export const readPosts = async (session: Express.Session) => {
   const result = db.transaction(async (trx) => {
-    const posts = await trx<Post>('post')
+    let postQuery = trx<Post>('post')
       .select(
         'post.*',
         trx.raw('count(comment.id)::integer as num_of_comments'),
@@ -83,7 +83,24 @@ export const readPosts = async () => {
         'l.post_id',
         'post.id'
       )
-      .groupBy('post.id', 'l.count');
+      .groupBy('post.id', 'l.count')
+      .orderBy('post.created_at', 'desc');
+
+    if (session && session.userId) {
+      postQuery = postQuery
+        .leftJoin(
+          trx<PostLike>('post_like')
+            .select()
+            .where('user_id', session.userId)
+            .as('pl'),
+          'pl.post_id',
+          'post.id'
+        )
+        .select('pl.user_id as liked')
+        .groupBy('pl.user_id');
+    }
+
+    const posts = await postQuery;
 
     const uniqueUserIds = [...new Set((posts as Post[]).map((p) => p.user_id))];
     const postIds = posts.map((p) => p.id);

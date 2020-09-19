@@ -2,7 +2,11 @@ import { combineReducers } from "redux";
 
 import { ActionTypes } from "../types";
 import { EntityInitialState } from "./types";
-import { READ_POSTS_SUCCESS } from "../post/constants";
+import {
+  LIKE_POST_SUCCESS,
+  READ_POSTS_SUCCESS,
+  UNLIKE_POST_SUCCESS,
+} from "../post/constants";
 import { Post, PostComment, PostMedia } from "../post/types";
 import { User } from "../auth/types";
 
@@ -43,6 +47,30 @@ const posts = (state = postInitialState, action: ActionTypes) => {
             acc[curr.id] = curr;
             return acc;
           }, {}),
+        },
+      };
+    case LIKE_POST_SUCCESS:
+      const lPost = { ...state.byId[action.like.post_id] };
+      lPost.liked = 1;
+      lPost.likes += 1;
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.like.post_id]: lPost,
+        },
+      };
+    case UNLIKE_POST_SUCCESS:
+      const uPost = { ...state.byId[action.like.post_id] };
+      delete uPost.liked;
+      uPost.likes -= 1;
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.like.post_id]: uPost,
         },
       };
     default:

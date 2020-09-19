@@ -3,13 +3,13 @@ import Carousel from "nuka-carousel";
 import moment from "moment";
 import { BsBookmark, BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 import styles from "./PostCard.module.css";
 import { MdChatBubbleOutline } from "react-icons/md";
 import { useTypedSelector } from "../../redux/hooks";
 import { useDispatch } from "react-redux";
-import { likePostAction } from "../../redux/post/actions";
+import { likePostAction, unlikePostAction } from "../../redux/post/actions";
 
 interface PostCardProps {
   postId: number;
@@ -56,9 +56,19 @@ export const PostCard = ({ postId }: PostCardProps) => {
         <div className={styles.icons}>
           <button
             className={styles.icon_button}
-            onClick={() => dispatch(likePostAction(postId))}
+            onClick={() => {
+              if (post.liked) {
+                dispatch(unlikePostAction(postId));
+              } else {
+                dispatch(likePostAction(postId));
+              }
+            }}
           >
-            <AiOutlineHeart />
+            {post.liked ? (
+              <AiFillHeart className={styles.filled_heart} />
+            ) : (
+              <AiOutlineHeart />
+            )}
           </button>
           <button className={styles.icon_button}>
             <MdChatBubbleOutline />

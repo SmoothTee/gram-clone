@@ -11,6 +11,9 @@ import {
   READ_POSTS_FAILURE,
   READ_POSTS_REQUEST,
   READ_POSTS_SUCCESS,
+  UNLIKE_POST_FAILURE,
+  UNLIKE_POST_REQUEST,
+  UNLIKE_POST_SUCCESS,
 } from "./constants";
 import {
   PostActionTypes,
@@ -69,6 +72,20 @@ const likePostFailure = (error: any): PostActionTypes => ({
   error,
 });
 
+const unlikePostRequest = (): PostActionTypes => ({
+  type: UNLIKE_POST_REQUEST,
+});
+
+const unlikePostSuccess = (like: PostLike): PostActionTypes => ({
+  type: UNLIKE_POST_SUCCESS,
+  like,
+});
+
+const unlikePostFailure = (error: any): PostActionTypes => ({
+  type: UNLIKE_POST_FAILURE,
+  error,
+});
+
 export const createPostAction = (formData: FormData): AppThunk => async (
   dispatch
 ) => {
@@ -120,5 +137,23 @@ export const likePostAction = (postId: number): AppThunk => async (
     }
   } catch (err) {
     dispatch(likePostFailure(`Failed to like post. ${err}`));
+  }
+};
+
+export const unlikePostAction = (postId: number): AppThunk => async (
+  dispatch
+) => {
+  try {
+    dispatch(unlikePostRequest());
+    const { success, res } = await clientFetch("/api/post/unlike", {
+      body: { postId },
+    });
+    if (success) {
+      dispatch(unlikePostSuccess(res.like));
+    } else {
+      dispatch(unlikePostFailure(res));
+    }
+  } catch (err) {
+    dispatch(unlikePostFailure(`Failed to unlike post: ${err}`));
   }
 };

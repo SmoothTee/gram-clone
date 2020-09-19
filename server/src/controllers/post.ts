@@ -15,8 +15,8 @@ export const createPost = catchError(async (req, res) => {
   res.json(result);
 });
 
-export const readPosts = catchError(async (_req, res) => {
-  const result = await postService.readPosts();
+export const readPosts = catchError(async (req, res) => {
+  const result = await postService.readPosts(req.session);
 
   res.json(result);
 });

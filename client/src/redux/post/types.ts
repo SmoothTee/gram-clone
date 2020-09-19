@@ -9,6 +9,9 @@ import {
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
   LIKE_POST_FAILURE,
+  UNLIKE_POST_FAILURE,
+  UNLIKE_POST_REQUEST,
+  UNLIKE_POST_SUCCESS,
 } from "./constants";
 
 export interface Post {
@@ -19,6 +22,7 @@ export interface Post {
   updated_at: string;
   num_of_comments: number;
   likes: number;
+  liked?: number;
 }
 
 export interface PostMedia {
@@ -98,6 +102,20 @@ interface LikePostFailureAction {
   error: any;
 }
 
+interface UnlikePostRequestAction {
+  type: typeof UNLIKE_POST_REQUEST;
+}
+
+interface UnlikePostSuccessAction {
+  type: typeof UNLIKE_POST_SUCCESS;
+  like: PostLike;
+}
+
+interface UnlikePostFailureAction {
+  type: typeof UNLIKE_POST_FAILURE;
+  error: any;
+}
+
 export type PostActionTypes =
   | CreatePostRequestAction
   | CreatePostSuccessAction
@@ -107,4 +125,7 @@ export type PostActionTypes =
   | ReadPostsFailureAction
   | LikePostRequestAction
   | LikePostSuccessAction
-  | LikePostFailureAction;
+  | LikePostFailureAction
+  | UnlikePostRequestAction
+  | UnlikePostSuccessAction
+  | UnlikePostFailureAction;
