@@ -38,7 +38,7 @@ export interface PostComment {
 }
 
 export interface PostState {
-  items: Post[];
+  items: number[];
   isCreating: boolean;
   isFetching: boolean;
 }

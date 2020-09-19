@@ -70,7 +70,6 @@ export const CreatePostModal = () => {
     files.forEach((file) => {
       formData.append("media", file);
     });
-    console.log("caption", caption);
     formData.append("caption", caption);
 
     dispatch(createPostAction(formData));

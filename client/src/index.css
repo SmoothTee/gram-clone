@@ -32,5 +32,6 @@ body {
 }
 
 button {
+  padding: 0;
   outline: none;
 }

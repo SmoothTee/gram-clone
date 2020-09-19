@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  max-width: 40rem;
+  width: 100%;
+  padding: 1rem;
+}
+
+.posts > *:not(:last-child) {
+  margin-bottom: 3rem;
+}
