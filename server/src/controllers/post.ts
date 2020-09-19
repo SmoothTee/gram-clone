@@ -1,5 +1,5 @@
 import { postService } from '../services';
-import { AppError, catchError } from '../utils';
+import { catchError } from '../utils';
 
 export const createPost = catchError(async (req, res) => {
   const media_urls = await postService.uploadMedia(

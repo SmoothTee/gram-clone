@@ -23,7 +23,7 @@ export const validateSchemas = {
   createComment: Joi.object({
     parent_id: Joi.number(),
     post_id: Joi.number().required(),
-    body: Joi.string().max(40000).required(),
+    text: Joi.string().max(300).required(),
   }),
   votePost: Joi.object({
     post_id: Joi.number().required(),

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent, useState } from "react";
 import Carousel from "nuka-carousel";
 import moment from "moment";
 import { BsBookmark, BsThreeDots } from "react-icons/bs";
@@ -10,6 +10,7 @@ import { MdChatBubbleOutline } from "react-icons/md";
 import { useTypedSelector } from "../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { likePostAction, unlikePostAction } from "../../redux/post/actions";
+import { createCommentAction } from "../../redux/comment/actions";
 
 interface PostCardProps {
   postId: number;
@@ -17,6 +18,8 @@ interface PostCardProps {
 
 export const PostCard = ({ postId }: PostCardProps) => {
   const dispatch = useDispatch();
+
+  const [comment, setComment] = useState("");
 
   const { users, posts, postMedia, comments } = useTypedSelector(
     (state) => state.entities
@@ -26,6 +29,12 @@ export const PostCard = ({ postId }: PostCardProps) => {
   const post = posts.byId[postId];
   const user = users.byId[post.user_id];
   const mediaIds = mediaByPostId[postId];
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
+    dispatch(createCommentAction(postId, comment));
+  };
 
   return (
     <div className={styles.container}>
@@ -96,8 +105,13 @@ export const PostCard = ({ postId }: PostCardProps) => {
           {moment(post.created_at).fromNow()}
         </span>
       </div>
-      <form className={styles.comment_form}>
-        <textarea className={styles.comment} placeholder="Add a comment..." />
+      <form className={styles.comment_form} onSubmit={handleSubmit}>
+        <textarea
+          className={styles.comment}
+          placeholder="Add a comment..."
+          value={comment}
+          onChange={(event) => setComment(event.target.value)}
+        />
         <button type="submit" className={styles.comment_button}>
           Post
         </button>

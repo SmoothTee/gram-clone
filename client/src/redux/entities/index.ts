@@ -9,6 +9,7 @@ import {
 } from "../post/constants";
 import { Post, PostComment, PostMedia } from "../post/types";
 import { User } from "../auth/types";
+import { CREATE_COMMENT_SUCCESS } from "../comment/constants";
 
 const userInitialState: EntityInitialState<User> = {
   byId: {},
@@ -121,6 +122,14 @@ const comments = (state = commentInitialState, action: ActionTypes) => {
             },
             {}
           ),
+        },
+      };
+    case CREATE_COMMENT_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.comment.id]: action.comment,
         },
       };
     default:
