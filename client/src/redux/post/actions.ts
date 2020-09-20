@@ -11,9 +11,15 @@ import {
   READ_POSTS_FAILURE,
   READ_POSTS_REQUEST,
   READ_POSTS_SUCCESS,
+  SAVE_POST_FAILURE,
+  SAVE_POST_REQUEST,
+  SAVE_POST_SUCCESS,
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
+  UNSAVE_POST_FAILURE,
+  UNSAVE_POST_REQUEST,
+  UNSAVE_POST_SUCCESS,
 } from "./constants";
 import {
   PostActionTypes,
@@ -21,6 +27,7 @@ import {
   PostMedia,
   PostComment,
   PostLike,
+  SavedPost,
 } from "./types";
 
 const createPostRequest = (): PostActionTypes => ({
@@ -83,6 +90,34 @@ const unlikePostSuccess = (like: PostLike): PostActionTypes => ({
 
 const unlikePostFailure = (error: any): PostActionTypes => ({
   type: UNLIKE_POST_FAILURE,
+  error,
+});
+
+const savePostRequest = (): PostActionTypes => ({
+  type: SAVE_POST_REQUEST,
+});
+
+const savePostSuccess = (savedPost: SavedPost): PostActionTypes => ({
+  type: SAVE_POST_SUCCESS,
+  savedPost,
+});
+
+const savePostFailure = (error: any): PostActionTypes => ({
+  type: SAVE_POST_FAILURE,
+  error,
+});
+
+const unsavePostRequest = (): PostActionTypes => ({
+  type: UNSAVE_POST_REQUEST,
+});
+
+const unsavePostSuccess = (unsavedPost: SavedPost): PostActionTypes => ({
+  type: UNSAVE_POST_SUCCESS,
+  unsavedPost,
+});
+
+const unsavePostFailure = (error: any): PostActionTypes => ({
+  type: UNSAVE_POST_FAILURE,
   error,
 });
 
@@ -155,5 +190,41 @@ export const unlikePostAction = (postId: number): AppThunk => async (
     }
   } catch (err) {
     dispatch(unlikePostFailure(`Failed to unlike post: ${err}`));
+  }
+};
+
+export const savePostAction = (postId: number): AppThunk => async (
+  dispatch
+) => {
+  try {
+    dispatch(savePostRequest());
+    const { success, res } = await clientFetch("/api/post/save", {
+      body: { postId },
+    });
+    if (success) {
+      dispatch(savePostSuccess(res.savedPost));
+    } else {
+      dispatch(savePostFailure(res));
+    }
+  } catch (err) {
+    dispatch(savePostFailure(`Failed to save post: ${err}`));
+  }
+};
+
+export const unsavePostAction = (postId: number): AppThunk => async (
+  dispatch
+) => {
+  try {
+    dispatch(unsavePostRequest());
+    const { success, res } = await clientFetch("/api/post/unsave", {
+      body: { postId },
+    });
+    if (success) {
+      dispatch(unsavePostSuccess(res.unsavedPost));
+    } else {
+      dispatch(unsavePostFailure(res));
+    }
+  } catch (err) {
+    dispatch(unsavePostFailure(`Failed to unsave post: ${err}`));
   }
 };

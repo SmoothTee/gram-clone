@@ -5,7 +5,9 @@ import { EntityInitialState } from "./types";
 import {
   LIKE_POST_SUCCESS,
   READ_POSTS_SUCCESS,
+  SAVE_POST_SUCCESS,
   UNLIKE_POST_SUCCESS,
+  UNSAVE_POST_SUCCESS,
 } from "../post/constants";
 import { Post, PostComment, PostMedia } from "../post/types";
 import { User } from "../auth/types";
@@ -51,27 +53,49 @@ const posts = (state = postInitialState, action: ActionTypes) => {
         },
       };
     case LIKE_POST_SUCCESS:
-      const lPost = { ...state.byId[action.like.post_id] };
-      lPost.liked = 1;
-      lPost.likes += 1;
+      const likePost = { ...state.byId[action.like.post_id] };
+      likePost.liked = 1;
+      likePost.likes += 1;
 
       return {
         ...state,
         byId: {
           ...state.byId,
-          [action.like.post_id]: lPost,
+          [action.like.post_id]: likePost,
         },
       };
     case UNLIKE_POST_SUCCESS:
-      const uPost = { ...state.byId[action.like.post_id] };
-      delete uPost.liked;
-      uPost.likes -= 1;
+      const unlikePost = { ...state.byId[action.like.post_id] };
+      delete unlikePost.liked;
+      unlikePost.likes -= 1;
 
       return {
         ...state,
         byId: {
           ...state.byId,
-          [action.like.post_id]: uPost,
+          [action.like.post_id]: unlikePost,
+        },
+      };
+    case SAVE_POST_SUCCESS:
+      const savePost = { ...state.byId[action.savedPost.post_id] };
+      savePost.saved = true;
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.savedPost.post_id]: savePost,
+        },
+      };
+    case UNSAVE_POST_SUCCESS:
+      const unsavePost = { ...state.byId[action.unsavedPost.post_id] };
+      delete unsavePost.saved;
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.unsavedPost.post_id]: unsavePost,
         },
       };
     default:

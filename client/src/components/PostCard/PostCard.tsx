@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from "react";
 import Carousel from "nuka-carousel";
 import moment from "moment";
-import { BsBookmark, BsThreeDots } from "react-icons/bs";
+import { BsBookmark, BsBookmarkFill, BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
@@ -9,7 +9,12 @@ import styles from "./PostCard.module.css";
 import { MdChatBubbleOutline } from "react-icons/md";
 import { useTypedSelector } from "../../redux/hooks";
 import { useDispatch } from "react-redux";
-import { likePostAction, unlikePostAction } from "../../redux/post/actions";
+import {
+  likePostAction,
+  unlikePostAction,
+  savePostAction,
+  unsavePostAction,
+} from "../../redux/post/actions";
 import { createCommentAction } from "../../redux/comment/actions";
 import { Comment } from "../Comment";
 
@@ -87,8 +92,17 @@ export const PostCard = ({ postId }: PostCardProps) => {
           <button className={styles.icon_button}>
             <MdChatBubbleOutline />
           </button>
-          <button className={styles.icon_button}>
-            <BsBookmark />
+          <button
+            className={styles.icon_button}
+            onClick={() => {
+              if (post.saved) {
+                dispatch(unsavePostAction(postId));
+              } else {
+                dispatch(savePostAction(postId));
+              }
+            }}
+          >
+            {post.saved ? <BsBookmarkFill /> : <BsBookmark />}
           </button>
         </div>
         <span className={styles.likes}>

@@ -29,6 +29,13 @@ interface PostLike {
   created_at: string;
 }
 
+interface SavedPost {
+  post_id: number;
+  user_id: number;
+  updated_at: string;
+  created_at: string;
+}
+
 export const uploadMedia = async (
   media: Express.Multer.File[]
 ): Promise<any> => {
@@ -74,7 +81,10 @@ export const readPosts = async (
       .select(
         'post.*',
         trx.raw('count(comment.id)::integer as num_of_comments'),
-        trx.raw('case when l.count is null then 0 else l.count end as likes')
+        trx.raw('case when l.count is null then 0 else l.count end as likes'),
+        trx.raw(
+          'case when saved_post.user_id is not null then true else false end as saved'
+        )
       )
       .leftJoin('comment', 'comment.post_id', 'post.id')
       .leftJoin(
@@ -85,7 +95,8 @@ export const readPosts = async (
         'l.post_id',
         'post.id'
       )
-      .groupBy('post.id', 'l.count')
+      .leftJoin('saved_post', 'saved_post.post_id', 'post.id')
+      .groupBy('post.id', 'l.count', 'saved_post.user_id')
       .orderBy('post.created_at', 'desc');
 
     if (session && session.userId) {
@@ -171,4 +182,47 @@ export const unlikePost = async (
   }
 
   return like;
+};
+
+export const savePost = async (
+  post_id: number,
+  user_id: number
+): Promise<SavedPost> => {
+  try {
+    const savedPost = (
+      await db<SavedPost>('saved_post').insert(
+        {
+          post_id,
+          user_id,
+        },
+        '*'
+      )
+    )[0];
+
+    return savedPost;
+  } catch (err) {
+    if (err.code === '23505') {
+      throw new AppError(409, 'You have already saved the post.');
+    } else {
+      throw err;
+    }
+  }
+};
+
+export const unsavePost = async (
+  post_id: number,
+  user_id: number
+): Promise<SavedPost> => {
+  const unsavedPost = (
+    await db<SavedPost>('saved_post')
+      .del()
+      .where({ post_id, user_id })
+      .returning('*')
+  )[0];
+
+  if (!unsavedPost) {
+    throw new AppError(404, 'You have not saved the post.');
+  }
+
+  return unsavedPost;
 };

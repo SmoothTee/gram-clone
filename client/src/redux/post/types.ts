@@ -12,6 +12,12 @@ import {
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
+  SAVE_POST_REQUEST,
+  SAVE_POST_SUCCESS,
+  SAVE_POST_FAILURE,
+  UNSAVE_POST_FAILURE,
+  UNSAVE_POST_REQUEST,
+  UNSAVE_POST_SUCCESS,
 } from "./constants";
 
 export interface Post {
@@ -23,6 +29,7 @@ export interface Post {
   num_of_comments: number;
   likes: number;
   liked?: number;
+  saved?: boolean;
 }
 
 export interface PostMedia {
@@ -46,6 +53,13 @@ export interface PostComment {
 }
 
 export interface PostLike {
+  post_id: number;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SavedPost {
   post_id: number;
   user_id: number;
   created_at: string;
@@ -117,6 +131,34 @@ interface UnlikePostFailureAction {
   error: any;
 }
 
+interface SavePostRequestAction {
+  type: typeof SAVE_POST_REQUEST;
+}
+
+interface SavePostSuccessAction {
+  type: typeof SAVE_POST_SUCCESS;
+  savedPost: SavedPost;
+}
+
+interface SavePostFailureAction {
+  type: typeof SAVE_POST_FAILURE;
+  error: any;
+}
+
+interface UnsavePostRequestAction {
+  type: typeof UNSAVE_POST_REQUEST;
+}
+
+interface UnsavePostSuccessAction {
+  type: typeof UNSAVE_POST_SUCCESS;
+  unsavedPost: SavedPost;
+}
+
+interface UnsavePostFailureAction {
+  type: typeof UNSAVE_POST_FAILURE;
+  error: any;
+}
+
 export type PostActionTypes =
   | CreatePostRequestAction
   | CreatePostSuccessAction
@@ -129,4 +171,10 @@ export type PostActionTypes =
   | LikePostFailureAction
   | UnlikePostRequestAction
   | UnlikePostSuccessAction
-  | UnlikePostFailureAction;
+  | UnlikePostFailureAction
+  | SavePostRequestAction
+  | SavePostSuccessAction
+  | SavePostFailureAction
+  | UnsavePostRequestAction
+  | UnsavePostSuccessAction
+  | UnsavePostFailureAction;

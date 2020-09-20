@@ -35,3 +35,21 @@ export const unlikePost = catchError(async (req, res) => {
 
   res.json({ like });
 });
+
+export const savePost = catchError(async (req, res) => {
+  const savedPost = await postService.savePost(
+    req.body.postId,
+    req.session.userId
+  );
+
+  res.json({ savedPost });
+});
+
+export const unsavePost = catchError(async (req, res) => {
+  const unsavedPost = await postService.unsavePost(
+    req.body.postId,
+    req.session.userId
+  );
+
+  res.json({ unsavedPost });
+});
