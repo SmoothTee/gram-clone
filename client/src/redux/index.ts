@@ -5,6 +5,7 @@ import { auth } from "./auth";
 import { modal } from "./modal";
 import { post } from "./post";
 import { postMedia } from "./postMedia";
+import { commentsByPostId } from "./comment";
 import { entities } from "./entities";
 import { error } from "./error";
 import { AppReducerParameters } from "./types";
@@ -15,6 +16,7 @@ export const appReducer = combineReducers({
   modal,
   post,
   postMedia,
+  commentsByPostId,
   entities,
   error,
 });

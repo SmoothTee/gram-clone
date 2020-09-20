@@ -1,9 +1,11 @@
+import { READ_POSTS_SUCCESS } from "../post/constants";
+import { ActionTypes } from "../types";
 import {
   CREATE_COMMENT_FAILURE,
   CREATE_COMMENT_REQUEST,
   CREATE_COMMENT_SUCCESS,
 } from "./constants";
-import { CommentActionTypes, CommentState } from "./types";
+import { CommentState } from "./types";
 
 const initialState: CommentState = {
   items: [],
@@ -11,7 +13,7 @@ const initialState: CommentState = {
   isCreating: false,
 };
 
-const comments = (state = initialState, action: CommentActionTypes) => {
+const comments = (state = initialState, action: ActionTypes) => {
   switch (action.type) {
     case CREATE_COMMENT_REQUEST:
       return {
@@ -29,6 +31,13 @@ const comments = (state = initialState, action: CommentActionTypes) => {
         ...state,
         isCreating: false,
       };
+    case READ_POSTS_SUCCESS:
+      return {
+        ...state,
+        items: action.comments
+          .filter((c) => c.post_id === action.pId)
+          .map((c) => c.id),
+      };
     default:
       return state;
   }
@@ -36,7 +45,7 @@ const comments = (state = initialState, action: CommentActionTypes) => {
 
 export const commentsByPostId = (
   state: { [key: number]: CommentState } = {},
-  action: CommentActionTypes
+  action: ActionTypes
 ) => {
   switch (action.type) {
     case CREATE_COMMENT_REQUEST:
@@ -45,6 +54,18 @@ export const commentsByPostId = (
       return {
         ...state,
         [action.postId]: comments(state[action.postId], action),
+      };
+    case READ_POSTS_SUCCESS:
+      const uniquePostIds = [...new Set(action.comments.map((c) => c.post_id))];
+      return {
+        ...state,
+        ...uniquePostIds.reduce<{ [key: number]: CommentState }>(
+          (acc, curr) => {
+            acc[curr] = comments(state[curr], { ...action, pId: curr });
+            return acc;
+          },
+          {}
+        ),
       };
     default:
       return state;

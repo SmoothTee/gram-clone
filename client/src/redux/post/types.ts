@@ -81,6 +81,7 @@ interface ReadPostsSuccessAction {
   users: User[];
   postMedia: PostMedia[];
   comments: PostComment[];
+  pId?: number;
 }
 
 interface ReadPostsFailureAction {

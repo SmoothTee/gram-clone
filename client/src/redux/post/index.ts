@@ -12,6 +12,7 @@ const initialState = {
   items: [],
   isCreating: false,
   isFetching: false,
+  isLiking: false,
 };
 
 export const post = (state = initialState, action: PostActionTypes) => {

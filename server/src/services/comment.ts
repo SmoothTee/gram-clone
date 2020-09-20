@@ -1,6 +1,6 @@
 import { db } from '../database';
 
-interface PostComment {
+export interface PostComment {
   parent_id?: number;
   id: number;
   post_id: number;

@@ -2,7 +2,8 @@ import { db } from '../database';
 import { AppError } from '../utils';
 import { userSerializer } from '../utils/serializer';
 import { uploadFromBuffer } from '../utils/uploadFromBuffer';
-import { User } from './auth';
+import { User, UserWithoutPassword } from './auth';
+import { PostComment } from './comment';
 
 interface Post {
   id: number;
@@ -60,13 +61,14 @@ export const createPost = async (
   return result;
 };
 
-// : Promise<{
-//   posts: Post[];
-//   users: User[];
-//   postMedia: PostMedia[];
-//   comments: PostComment[];
-// }>
-export const readPosts = async (session: Express.Session) => {
+export const readPosts = async (
+  session: Express.Session
+): Promise<{
+  posts: Post[];
+  users: UserWithoutPassword[];
+  postMedia: PostMedia[];
+  comments: PostComment[];
+}> => {
   const result = db.transaction(async (trx) => {
     let postQuery = trx<Post>('post')
       .select(
@@ -102,16 +104,7 @@ export const readPosts = async (session: Express.Session) => {
 
     const posts = await postQuery;
 
-    const uniqueUserIds = [...new Set((posts as Post[]).map((p) => p.user_id))];
     const postIds = posts.map((p) => p.id);
-
-    const users = (
-      await trx<User>('public.user').select().whereIn('id', uniqueUserIds)
-    ).map(userSerializer);
-
-    const postMedia = await trx<PostMedia>('post_media')
-      .select()
-      .whereIn('post_id', postIds);
 
     const comments = await trx('comment')
       .with(
@@ -123,6 +116,18 @@ export const readPosts = async (session: Express.Session) => {
       .select('*')
       .from('cte')
       .where('rn', '<', 3)
+      .whereIn('post_id', postIds);
+
+    const userIds = (posts as Post[]).map((p) => p.user_id);
+    const cUserIds = (comments as PostComment[]).map((c) => c.user_id);
+    const uniqueUserIds = [...new Set(userIds.concat(cUserIds))];
+
+    const users = (
+      await trx<User>('public.user').select().whereIn('id', uniqueUserIds)
+    ).map(userSerializer);
+
+    const postMedia = await trx<PostMedia>('post_media')
+      .select()
       .whereIn('post_id', postIds);
 
     return { posts, users, postMedia, comments };

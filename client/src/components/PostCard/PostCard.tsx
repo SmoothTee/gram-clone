@@ -11,6 +11,7 @@ import { useTypedSelector } from "../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { likePostAction, unlikePostAction } from "../../redux/post/actions";
 import { createCommentAction } from "../../redux/comment/actions";
+import { Comment } from "../Comment";
 
 interface PostCardProps {
   postId: number;
@@ -21,14 +22,18 @@ export const PostCard = ({ postId }: PostCardProps) => {
 
   const [comment, setComment] = useState("");
 
-  const { users, posts, postMedia, comments } = useTypedSelector(
+  const { users, posts, postMedia } = useTypedSelector(
     (state) => state.entities
   );
   const mediaByPostId = useTypedSelector((state) => state.postMedia.byPostId);
+  const commentsByPostId = useTypedSelector((state) => state.commentsByPostId);
 
   const post = posts.byId[postId];
   const user = users.byId[post.user_id];
   const mediaIds = mediaByPostId[postId];
+  const commentIds = commentsByPostId[postId]
+    ? commentsByPostId[postId].items
+    : [];
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -101,6 +106,9 @@ export const PostCard = ({ postId }: PostCardProps) => {
             {post.num_of_comments === 1 ? "" : "s"}
           </span>
         </button>
+        {commentIds.map((cId) => (
+          <Comment key={cId} commentId={cId} />
+        ))}
         <span className={styles.created_at}>
           {moment(post.created_at).fromNow()}
         </span>
