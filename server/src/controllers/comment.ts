@@ -9,3 +9,21 @@ export const createComment = catchError(async (req, res) => {
 
   res.json({ comment });
 });
+
+export const likeComment = catchError(async (req, res) => {
+  const commentLike = await commentService.likeComment(
+    req.body.commentId,
+    req.session.userId
+  );
+
+  res.json({ commentLike });
+});
+
+export const unlikeComment = catchError(async (req, res) => {
+  const commentLike = await commentService.unlikeComment(
+    req.body.commentId,
+    req.session.userId
+  );
+
+  res.json({ commentLike });
+});

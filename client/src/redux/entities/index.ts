@@ -9,9 +9,14 @@ import {
   UNLIKE_POST_SUCCESS,
   UNSAVE_POST_SUCCESS,
 } from "../post/constants";
-import { Post, PostComment, PostMedia } from "../post/types";
+import { Post, PostMedia } from "../post/types";
 import { User } from "../auth/types";
-import { CREATE_COMMENT_SUCCESS } from "../comment/constants";
+import {
+  CREATE_COMMENT_SUCCESS,
+  LIKE_COMMENT_SUCCESS,
+  UNLIKE_COMMENT_SUCCESS,
+} from "../comment/constants";
+import { PostComment } from "../comment/types";
 
 const userInitialState: EntityInitialState<User> = {
   byId: {},
@@ -98,6 +103,17 @@ const posts = (state = postInitialState, action: ActionTypes) => {
           [action.unsavedPost.post_id]: unsavePost,
         },
       };
+    case CREATE_COMMENT_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.postId]: {
+            ...state.byId[action.postId],
+            num_of_comments: state.byId[action.postId].num_of_comments += 1,
+          },
+        },
+      };
     default:
       return state;
   }
@@ -154,6 +170,28 @@ const comments = (state = commentInitialState, action: ActionTypes) => {
         byId: {
           ...state.byId,
           [action.comment.id]: action.comment,
+        },
+      };
+    case LIKE_COMMENT_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.commentLike.comment_id]: {
+            ...state.byId[action.commentLike.comment_id],
+            liked: true,
+          },
+        },
+      };
+    case UNLIKE_COMMENT_SUCCESS:
+      const unlikedPost = { ...state.byId[action.commentLike.comment_id] };
+      delete unlikedPost.liked;
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.commentLike.comment_id]: unlikedPost,
         },
       };
     default:

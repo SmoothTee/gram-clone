@@ -41,7 +41,7 @@ export const PostCard = ({ postId }: PostCardProps) => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    dispatch(createCommentAction(postId, comment));
+    dispatch(createCommentAction(postId, comment, () => setComment("")));
   };
 
   return (
@@ -125,7 +125,11 @@ export const PostCard = ({ postId }: PostCardProps) => {
           value={comment}
           onChange={(event) => setComment(event.target.value)}
         />
-        <button type="submit" className={styles.comment_button}>
+        <button
+          disabled={comment.trim().length === 0}
+          type="submit"
+          className={styles.comment_button}
+        >
           Post
         </button>
       </form>

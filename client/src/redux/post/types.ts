@@ -1,4 +1,5 @@
 import { User } from "../auth/types";
+import { PostComment } from "../comment/types";
 import {
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
@@ -38,16 +39,6 @@ export interface PostMedia {
   media_type: string;
   public_id: string;
   media_url: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface PostComment {
-  id: number;
-  user_id: number;
-  post_id: number;
-  parent_id?: number;
-  text: string;
   created_at: string;
   updated_at: string;
 }

@@ -13,5 +13,17 @@ router
     validate(validateSchemas.createComment, 'body'),
     commentController.createComment
   );
+router.post(
+  '/like',
+  validate(validateSchemas.likeComment, 'body'),
+  protect,
+  commentController.likeComment
+);
+router.post(
+  '/unlike',
+  protect,
+  validate(validateSchemas.unlikeComment, 'body'),
+  commentController.unlikeComment
+);
 
 export const comment = router;

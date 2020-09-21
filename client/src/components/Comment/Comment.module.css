@@ -23,3 +23,7 @@
 .like_button:hover {
   cursor: pointer;
 }
+
+.filled_heart {
+  color: var(--red);
+}

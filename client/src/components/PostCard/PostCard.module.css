@@ -123,6 +123,10 @@
   cursor: pointer;
 }
 
+.comment_button:disabled {
+  pointer-events: none;
+}
+
 .filled_heart {
   color: var(--red);
 }

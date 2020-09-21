@@ -21,14 +21,8 @@ import {
   UNSAVE_POST_REQUEST,
   UNSAVE_POST_SUCCESS,
 } from "./constants";
-import {
-  PostActionTypes,
-  Post,
-  PostMedia,
-  PostComment,
-  PostLike,
-  SavedPost,
-} from "./types";
+import { PostActionTypes, Post, PostMedia, PostLike, SavedPost } from "./types";
+import { PostComment } from "../comment/types";
 
 const createPostRequest = (): PostActionTypes => ({
   type: CREATE_POST_REQUEST,

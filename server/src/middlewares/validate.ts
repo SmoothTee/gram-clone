@@ -33,6 +33,18 @@ export const validateSchemas = {
     comment_id: Joi.number().required(),
     vote: Joi.number().valid(1, -1).required(),
   }),
+  likeComment: Joi.object({
+    commentId: Joi.number().required(),
+  }),
+  unlikeComment: Joi.object({
+    commentId: Joi.number().required(),
+  }),
+  likePost: Joi.object({
+    postId: Joi.number().required(),
+  }),
+  unlikePost: Joi.object({
+    postId: Joi.number().required(),
+  }),
 };
 
 export const validate = (

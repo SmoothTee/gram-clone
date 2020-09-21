@@ -1,5 +1,6 @@
 import { User } from "../auth/types";
-import { Post, PostComment, PostMedia } from "../post/types";
+import { Post, PostMedia } from "../post/types";
+import { PostComment } from "../comment/types";
 
 export interface EntityInitialState<T> {
   byId: { [key: number]: T };

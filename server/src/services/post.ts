@@ -3,7 +3,7 @@ import { AppError } from '../utils';
 import { userSerializer } from '../utils/serializer';
 import { uploadFromBuffer } from '../utils/uploadFromBuffer';
 import { User, UserWithoutPassword } from './auth';
-import { PostComment } from './comment';
+import { PostComment, CommentLike } from './comment';
 
 interface Post {
   id: number;
@@ -109,7 +109,11 @@ export const readPosts = async (
           'pl.post_id',
           'post.id'
         )
-        .select('pl.user_id as liked')
+        .select(
+          trx.raw(
+            'case when pl.user_id is not null then true else false end as liked'
+          )
+        )
         .groupBy('pl.user_id');
     }
 
@@ -117,17 +121,36 @@ export const readPosts = async (
 
     const postIds = posts.map((p) => p.id);
 
-    const comments = await trx('comment')
+    let commentQuery = trx('comment')
       .with(
         'cte',
         trx.raw(
           'select *, ROW_NUMBER() OVER (PARTITION BY post_id ORDER BY created_at DESC) as rn from comment'
         )
       )
-      .select('*')
+      .select('cte.*')
       .from('cte')
       .where('rn', '<', 3)
       .whereIn('post_id', postIds);
+
+    if (session && session.userId) {
+      commentQuery = commentQuery
+        .leftJoin(
+          trx<CommentLike>('comment_like')
+            .select()
+            .where('user_id', session.userId)
+            .as('cl'),
+          'cl.comment_id',
+          'cte.id'
+        )
+        .select(
+          trx.raw(
+            'case when cl.user_id is not null then true else false end as liked'
+          )
+        );
+    }
+
+    const comments = await commentQuery;
 
     const userIds = (posts as Post[]).map((p) => p.user_id);
     const cUserIds = (comments as PostComment[]).map((c) => c.user_id);

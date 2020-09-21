@@ -18,8 +18,18 @@ router
     postController.createPost
   )
   .get(postController.readPosts);
-router.post('/like', protect, postController.likePost);
-router.post('/unlike', protect, postController.unlikePost);
+router.post(
+  '/like',
+  protect,
+  validate(validateSchemas.likePost, 'body'),
+  postController.likePost
+);
+router.post(
+  '/unlike',
+  protect,
+  validate(validateSchemas.unlikePost, 'body'),
+  postController.unlikePost
+);
 router.post('/save', protect, postController.savePost);
 router.post('/unsave', protect, postController.unsavePost);
 
