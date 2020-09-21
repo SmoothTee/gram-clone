@@ -1,5 +1,4 @@
 import React, { FormEvent, useState } from "react";
-import Carousel from "nuka-carousel";
 import moment from "moment";
 import { BsBookmark, BsBookmarkFill, BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
@@ -17,6 +16,7 @@ import {
 } from "../../redux/post/actions";
 import { createCommentAction } from "../../redux/comment/actions";
 import { Comment } from "../Comment";
+import { MediaCarousel } from "../MediaCarousel";
 
 interface PostCardProps {
   postId: number;
@@ -27,9 +27,7 @@ export const PostCard = ({ postId }: PostCardProps) => {
 
   const [comment, setComment] = useState("");
 
-  const { users, posts, postMedia } = useTypedSelector(
-    (state) => state.entities
-  );
+  const { users, posts } = useTypedSelector((state) => state.entities);
   const mediaByPostId = useTypedSelector((state) => state.postMedia.byPostId);
   const commentsByPostId = useTypedSelector((state) => state.commentsByPostId);
 
@@ -63,14 +61,7 @@ export const PostCard = ({ postId }: PostCardProps) => {
           <BsThreeDots />
         </button>
       </div>
-      <Carousel>
-        {mediaIds.map((mId) => {
-          const media = postMedia.byId[mId];
-          return (
-            <img className={styles.image} key={mId} src={media.media_url} />
-          );
-        })}
-      </Carousel>
+      <MediaCarousel mediaIds={mediaIds} />
       <div className={styles.main}>
         <div className={styles.icons}>
           <button

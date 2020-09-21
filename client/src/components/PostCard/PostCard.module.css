@@ -67,11 +67,6 @@
   cursor: pointer;
 }
 
-.image {
-  height: 40rem;
-  object-fit: cover;
-}
-
 .likes {
   font-weight: 700;
 }

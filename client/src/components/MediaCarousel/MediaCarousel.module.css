@@ -1,0 +1,32 @@
+.carousel_button {
+  display: flex;
+  font-size: 2rem;
+  color: var(--white);
+  margin: 0.5rem;
+  background: none;
+  border: none;
+}
+
+.carousel_button:hover {
+  cursor: pointer;
+}
+
+.paging_dot {
+  display: inline-block;
+  border-radius: 50%;
+  background: var(--blue);
+  width: 1rem;
+  height: 1rem;
+  margin: 0.1rem;
+  cursor: pointer;
+}
+
+.active {
+  background: var(--darker-blue);
+}
+
+.image {
+  height: 100%;
+  max-height: 40rem;
+  object-fit: cover;
+}
