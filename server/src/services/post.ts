@@ -81,10 +81,7 @@ export const readPosts = async (
       .select(
         'post.*',
         trx.raw('count(comment.id)::integer as num_of_comments'),
-        trx.raw('case when l.count is null then 0 else l.count end as likes'),
-        trx.raw(
-          'case when saved_post.user_id is not null then true else false end as saved'
-        )
+        trx.raw('case when l.count is null then 0 else l.count end as likes')
       )
       .leftJoin('comment', 'comment.post_id', 'post.id')
       .leftJoin(
@@ -95,11 +92,26 @@ export const readPosts = async (
         'l.post_id',
         'post.id'
       )
-      .leftJoin('saved_post', 'saved_post.post_id', 'post.id')
-      .groupBy('post.id', 'l.count', 'saved_post.user_id')
+      .groupBy('post.id', 'l.count')
       .orderBy('post.created_at', 'desc');
 
     if (session && session.userId) {
+      postQuery = postQuery
+        .leftJoin(
+          trx<SavedPost>('saved_post')
+            .select()
+            .where('user_id', session.userId)
+            .as('saved_post'),
+          'saved_post.post_id',
+          'post.id'
+        )
+        .groupBy('saved_post.user_id')
+        .select(
+          trx.raw(
+            'case when saved_post.user_id is not null then true else false end as saved'
+          )
+        );
+
       postQuery = postQuery
         .leftJoin(
           trx<PostLike>('post_like')
@@ -248,4 +260,95 @@ export const unsavePost = async (
   }
 
   return unsavedPost;
+};
+
+export const readPost = async (post_id: number, session: Express.Session) => {
+  const result = await db.transaction(async (trx) => {
+    let postQuery = trx<Post>('post')
+      .first(
+        'post.*',
+        trx.raw('case when l.count is null then 0 else l.count end as likes')
+      )
+      .where('id', post_id)
+      .leftJoin(
+        trx<PostLike>('post_like')
+          .select('post_id', trx.raw('count(*)::integer'))
+          .groupBy('post_id')
+          .as('l'),
+        'l.post_id',
+        'post.id'
+      );
+
+    if (session && session.userId) {
+      postQuery = postQuery
+        .leftJoin(
+          trx<SavedPost>('saved_post')
+            .first()
+            .where('user_id', session.userId)
+            .as('saved_post'),
+          'saved_post.post_id',
+          'post.id'
+        )
+        .select(
+          trx.raw(
+            'case when saved_post.user_id is not null then true else false end as saved'
+          )
+        );
+
+      postQuery = postQuery
+        .leftJoin(
+          trx<PostLike>('post_like')
+            .first()
+            .where({ user_id: session.userId })
+            .as('pl'),
+          'pl.post_id',
+          'post.id'
+        )
+        .select(
+          trx.raw(
+            'case when pl.user_id is not null then true else false end as liked'
+          )
+        );
+    }
+
+    const post = await postQuery;
+
+    let commentQuery = trx('comment')
+      .select('comment.*')
+      .where({ post_id: post.id, parent_id: null });
+
+    if (session && session.userId) {
+      commentQuery = commentQuery
+        .leftJoin(
+          trx<CommentLike>('comment_like')
+            .select()
+            .where('user_id', session.userId)
+            .as('cl'),
+          'cl.comment_id',
+          'comment.id'
+        )
+        .select(
+          trx.raw(
+            'case when cl.user_id is not null then true else false end as liked'
+          )
+        );
+    }
+
+    const comments = await commentQuery;
+
+    const cUserIds = (comments as PostComment[]).map((c) => c.user_id);
+    const uniqueUserIds = [...new Set(cUserIds.concat(post.user_id))];
+
+    const users = (
+      await trx<User>('public.user').select().whereIn('id', uniqueUserIds)
+    ).map(userSerializer);
+
+    const postMedia = await trx<PostMedia>('post_media')
+      .select()
+      .where('post_id', post.id);
+
+    return { post, users, postMedia, comments };
+  });
+
+  return result;
 };

@@ -12,6 +12,7 @@ import { Profile } from "../../pages/Profile";
 import { ProtectedRoute } from "../ProtectedRoute/ProtectedRoute";
 import { Settings } from "../../pages/Settings";
 import { ModalManager } from "../ModalManager";
+import { Post } from "../../pages/Post";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,9 @@ export const App = () => {
         <AuthRoute exact path="/register">
           <Register />
         </AuthRoute>
+        <ProtectedRoute exact path="/post/:post_id">
+          <Post />
+        </ProtectedRoute>
         <ProtectedRoute exact path="/profile/:username">
           <Profile />
         </ProtectedRoute>

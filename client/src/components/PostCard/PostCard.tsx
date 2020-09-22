@@ -80,9 +80,9 @@ export const PostCard = ({ postId }: PostCardProps) => {
               <AiOutlineHeart />
             )}
           </button>
-          <button className={styles.icon_button}>
+          <Link to={`/post/${postId}`} className={styles.icon_button}>
             <MdChatBubbleOutline />
-          </button>
+          </Link>
           <button
             className={styles.icon_button}
             onClick={() => {

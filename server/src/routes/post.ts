@@ -32,5 +32,6 @@ router.post(
 );
 router.post('/save', protect, postController.savePost);
 router.post('/unsave', protect, postController.unsavePost);
+router.route('/:post_id').get(postController.readPost);
 
 export const post = router;

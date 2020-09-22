@@ -53,3 +53,12 @@ export const unsavePost = catchError(async (req, res) => {
 
   res.json({ unsavedPost });
 });
+
+export const readPost = catchError(async (req, res) => {
+  const result = await postService.readPost(
+    Number(req.params.post_id),
+    req.session
+  );
+
+  res.json(result);
+});
