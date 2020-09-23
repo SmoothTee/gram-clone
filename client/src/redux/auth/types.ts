@@ -21,6 +21,7 @@ export interface User {
   password: string;
   created_at: string;
   updated_at: string;
+  avatar_url?: string;
 }
 
 export interface AuthState {

@@ -19,6 +19,9 @@ import {
   UNSAVE_POST_FAILURE,
   UNSAVE_POST_REQUEST,
   UNSAVE_POST_SUCCESS,
+  READ_POST_REQUEST,
+  READ_POST_SUCCESS,
+  READ_POST_FAILURE,
 } from "./constants";
 
 export interface Post {
@@ -58,6 +61,11 @@ export interface SavedPost {
 }
 
 export interface PostState {
+  item: number | null;
+  isFetching: boolean;
+}
+
+export interface PostFeedState {
   items: number[];
   isCreating: boolean;
   isFetching: boolean;
@@ -150,6 +158,24 @@ interface UnsavePostFailureAction {
   error: any;
 }
 
+interface ReadPostRequestAction {
+  type: typeof READ_POST_REQUEST;
+  postId: number;
+}
+
+interface ReadPostSuccessAction {
+  type: typeof READ_POST_SUCCESS;
+  post: Post;
+  users: User[];
+  comments: PostComment[];
+  postMedia: PostMedia[];
+}
+
+interface ReadPostFailureAction {
+  type: typeof READ_POST_FAILURE;
+  error: any;
+}
+
 export type PostActionTypes =
   | CreatePostRequestAction
   | CreatePostSuccessAction
@@ -168,4 +194,7 @@ export type PostActionTypes =
   | SavePostFailureAction
   | UnsavePostRequestAction
   | UnsavePostSuccessAction
-  | UnsavePostFailureAction;
+  | UnsavePostFailureAction
+  | ReadPostRequestAction
+  | ReadPostSuccessAction
+  | ReadPostFailureAction;

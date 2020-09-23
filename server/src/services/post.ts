@@ -298,8 +298,8 @@ export const readPost = async (post_id: number, session: Express.Session) => {
       postQuery = postQuery
         .leftJoin(
           trx<PostLike>('post_like')
-            .first()
-            .where({ user_id: session.userId })
+            .select()
+            .where('user_id', session.userId)
             .as('pl'),
           'pl.post_id',
           'post.id'
@@ -314,8 +314,19 @@ export const readPost = async (post_id: number, session: Express.Session) => {
     const post = await postQuery;
 
     let commentQuery = trx('comment')
-      .select('comment.*')
-      .where({ post_id: post.id, parent_id: null });
+      .select(
+        'comment.*',
+        trx.raw('case when l.count is null then 0 else l.count end as likes')
+      )
+      .where({ post_id: post.id, parent_id: null })
+      .leftJoin(
+        trx<CommentLike>('comment_like')
+          .select('comment_id', trx.raw('count(*)::integer'))
+          .groupBy('comment_id')
+          .as('l'),
+        'l.comment_id',
+        'comment.id'
+      );
 
     if (session && session.userId) {
       commentQuery = commentQuery

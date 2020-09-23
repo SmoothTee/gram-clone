@@ -11,6 +11,9 @@ import {
   READ_POSTS_FAILURE,
   READ_POSTS_REQUEST,
   READ_POSTS_SUCCESS,
+  READ_POST_FAILURE,
+  READ_POST_REQUEST,
+  READ_POST_SUCCESS,
   SAVE_POST_FAILURE,
   SAVE_POST_REQUEST,
   SAVE_POST_SUCCESS,
@@ -112,6 +115,29 @@ const unsavePostSuccess = (unsavedPost: SavedPost): PostActionTypes => ({
 
 const unsavePostFailure = (error: any): PostActionTypes => ({
   type: UNSAVE_POST_FAILURE,
+  error,
+});
+
+const readPostRequest = (postId: number): PostActionTypes => ({
+  type: READ_POST_REQUEST,
+  postId,
+});
+
+const readPostSuccess = (data: {
+  post: Post;
+  users: User[];
+  postMedia: PostMedia[];
+  comments: PostComment[];
+}): PostActionTypes => ({
+  type: READ_POST_SUCCESS,
+  post: data.post,
+  users: data.users,
+  postMedia: data.postMedia,
+  comments: data.comments,
+});
+
+const readPostFailure = (error: any) => ({
+  type: READ_POST_FAILURE,
   error,
 });
 
@@ -220,5 +246,21 @@ export const unsavePostAction = (postId: number): AppThunk => async (
     }
   } catch (err) {
     dispatch(unsavePostFailure(`Failed to unsave post: ${err}`));
+  }
+};
+
+export const readPostAction = (postId: number): AppThunk => async (
+  dispatch
+) => {
+  try {
+    dispatch(readPostRequest(postId));
+    const { success, res } = await clientFetch(`/api/post/${postId}`);
+    if (success) {
+      dispatch(readPostSuccess(res));
+    } else {
+      dispatch(readPostFailure(res));
+    }
+  } catch (err) {
+    dispatch(readPostFailure(`Failed to read post: ${err}`));
   }
 };

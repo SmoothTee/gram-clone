@@ -10,8 +10,8 @@ import styles from "./PostFeed.module.css";
 export const PostFeed = () => {
   const dispatch = useDispatch();
 
-  const isFetching = useTypedSelector((state) => state.post.isFetching);
-  const postItems = useTypedSelector((state) => state.post.items);
+  const isFetching = useTypedSelector((state) => state.postFeed.isFetching);
+  const postItems = useTypedSelector((state) => state.postFeed.items);
 
   useEffect(() => {
     dispatch(readPostsAction());

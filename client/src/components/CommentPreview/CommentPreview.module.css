@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.user {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.text {
+  margin-left: 0.3rem;
+}

@@ -5,8 +5,11 @@ import {
   READ_POSTS_FAILURE,
   READ_POSTS_REQUEST,
   READ_POSTS_SUCCESS,
+  READ_POST_FAILURE,
+  READ_POST_REQUEST,
+  READ_POST_SUCCESS,
 } from "./constants";
-import { PostActionTypes } from "./types";
+import { PostActionTypes, PostState } from "./types";
 
 const initialState = {
   items: [],
@@ -15,7 +18,7 @@ const initialState = {
   isLiking: false,
 };
 
-export const post = (state = initialState, action: PostActionTypes) => {
+export const postFeed = (state = initialState, action: PostActionTypes) => {
   switch (action.type) {
     case CREATE_POST_REQUEST:
       return {
@@ -36,7 +39,7 @@ export const post = (state = initialState, action: PostActionTypes) => {
     case READ_POSTS_SUCCESS:
       return {
         ...state,
-        items: [...state.items, ...action.posts.map((p) => p.id)],
+        items: [...new Set([...state.items, ...action.posts.map((p) => p.id)])],
         isFetching: false,
       };
     case READ_POSTS_FAILURE:
@@ -44,6 +47,32 @@ export const post = (state = initialState, action: PostActionTypes) => {
         ...state,
         isFetching: false,
       };
+    default:
+      return state;
+  }
+};
+
+const postInitialState: PostState = {
+  item: null,
+  isFetching: false,
+};
+
+export const post = (state = postInitialState, action: PostActionTypes) => {
+  switch (action.type) {
+    case READ_POST_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+        item: action.postId,
+      };
+    case READ_POST_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        item: action.post.id,
+      };
+    case READ_POST_FAILURE:
+      return postInitialState;
     default:
       return state;
   }

@@ -18,7 +18,8 @@ export interface PostComment {
   text: string;
   created_at: string;
   updated_at: string;
-  liked?: boolean;
+  liked: boolean;
+  likes: number;
 }
 
 export interface CommentLike {

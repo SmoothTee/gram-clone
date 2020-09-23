@@ -1,0 +1,30 @@
+.container {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.container > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.container > *:last-child {
+  margin-left: auto;
+}
+
+.icon_button {
+  display: flex;
+  padding: 0;
+  font-size: 1.5rem;
+  color: inherit;
+  border: none;
+  background: none;
+}
+
+.icon_button:hover {
+  cursor: pointer;
+}
+
+.filled_heart {
+  color: var(--red);
+}

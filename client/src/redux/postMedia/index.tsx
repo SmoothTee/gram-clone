@@ -1,4 +1,4 @@
-import { READ_POSTS_SUCCESS } from "../post/constants";
+import { READ_POSTS_SUCCESS, READ_POST_SUCCESS } from "../post/constants";
 import { PostActionTypes } from "../post/types";
 import { PostMediaState } from "./types";
 
@@ -24,6 +24,14 @@ export const postMedia = (state = initialState, action: PostActionTypes) => {
             },
             {}
           ),
+        },
+      };
+    case READ_POST_SUCCESS:
+      return {
+        ...state,
+        byPostId: {
+          ...state.byPostId,
+          [action.post.id]: action.postMedia.map((pM) => pM.id),
         },
       };
     default:

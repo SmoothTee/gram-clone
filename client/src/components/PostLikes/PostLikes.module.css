@@ -1,0 +1,11 @@
+.likes {
+  align-self: flex-start;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  background: none;
+}
+
+.likes:hover {
+  cursor: pointer;
+}

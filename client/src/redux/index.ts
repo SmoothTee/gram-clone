@@ -3,7 +3,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 import { auth } from "./auth";
 import { modal } from "./modal";
-import { post } from "./post";
+import { post, postFeed } from "./post";
 import { postMedia } from "./postMedia";
 import { commentsByPostId } from "./comment";
 import { entities } from "./entities";
@@ -15,6 +15,7 @@ export const appReducer = combineReducers({
   auth,
   modal,
   post,
+  postFeed,
   postMedia,
   commentsByPostId,
   entities,

@@ -1,29 +1,52 @@
 .container {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr auto;
+  gap: 0 1rem;
 }
 
-.user {
+.avatar {
+  grid-row: 1/2;
+  grid-column: 1/2;
+  width: 2rem;
+  border-radius: 50%;
+}
+
+.main {
+  grid-row: 1/2;
+  grid-column: 2/3;
+}
+
+.username {
   color: inherit;
   font-weight: 700;
   text-decoration: none;
 }
 
 .text {
-  margin-left: 0.3rem;
+  margin-left: 0.5rem;
 }
 
-.like_button {
-  margin-left: auto;
-  display: flex;
-  border: none;
+.footer {
+  grid-row: 2/-1;
+  grid-column: 2/3;
+}
+
+.footer > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.footer_button {
+  font-weight: 700;
   background: none;
+  border: none;
 }
 
-.like_button:hover {
+.footer_button:hover {
   cursor: pointer;
 }
 
-.filled_heart {
-  color: var(--red);
+.created_at {
+  font-weight: 300;
+  font-size: 0.8rem;
 }

@@ -5,6 +5,7 @@ import { EntityInitialState } from "./types";
 import {
   LIKE_POST_SUCCESS,
   READ_POSTS_SUCCESS,
+  READ_POST_SUCCESS,
   SAVE_POST_SUCCESS,
   UNLIKE_POST_SUCCESS,
   UNSAVE_POST_SUCCESS,
@@ -25,6 +26,17 @@ const userInitialState: EntityInitialState<User> = {
 const users = (state = userInitialState, action: ActionTypes) => {
   switch (action.type) {
     case READ_POSTS_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          ...action.users.reduce<{ [key: number]: User }>((acc, curr) => {
+            acc[curr.id] = curr;
+            return acc;
+          }, {}),
+        },
+      };
+    case READ_POST_SUCCESS:
       return {
         ...state,
         byId: {
@@ -114,6 +126,14 @@ const posts = (state = postInitialState, action: ActionTypes) => {
           },
         },
       };
+    case READ_POST_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.post.id]: action.post,
+        },
+      };
     default:
       return state;
   }
@@ -126,6 +146,20 @@ const postMediaInitialState: EntityInitialState<PostMedia> = {
 const postMedia = (state = postMediaInitialState, action: ActionTypes) => {
   switch (action.type) {
     case READ_POSTS_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          ...action.postMedia.reduce<{ [key: number]: PostMedia }>(
+            (acc, curr) => {
+              acc[curr.id] = curr;
+              return acc;
+            },
+            {}
+          ),
+        },
+      };
+    case READ_POST_SUCCESS:
       return {
         ...state,
         byId: {
@@ -180,18 +214,38 @@ const comments = (state = commentInitialState, action: ActionTypes) => {
           [action.commentLike.comment_id]: {
             ...state.byId[action.commentLike.comment_id],
             liked: true,
+            likes: state.byId[action.commentLike.comment_id].likes
+              ? (state.byId[action.commentLike.comment_id].likes += 1)
+              : 1,
           },
         },
       };
     case UNLIKE_COMMENT_SUCCESS:
       const unlikedPost = { ...state.byId[action.commentLike.comment_id] };
-      delete unlikedPost.liked;
 
       return {
         ...state,
         byId: {
           ...state.byId,
-          [action.commentLike.comment_id]: unlikedPost,
+          [action.commentLike.comment_id]: {
+            ...unlikedPost,
+            liked: false,
+            likes: unlikedPost.likes -= 1,
+          },
+        },
+      };
+    case READ_POST_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          ...action.comments.reduce<{ [key: number]: PostComment }>(
+            (acc, curr) => {
+              acc[curr.id] = curr;
+              return acc;
+            },
+            {}
+          ),
         },
       };
     default:

@@ -1,4 +1,4 @@
-import { READ_POSTS_SUCCESS } from "../post/constants";
+import { READ_POSTS_SUCCESS, READ_POST_SUCCESS } from "../post/constants";
 import { ActionTypes } from "../types";
 import {
   CREATE_COMMENT_FAILURE,
@@ -34,9 +34,20 @@ const comments = (state = initialState, action: ActionTypes) => {
     case READ_POSTS_SUCCESS:
       return {
         ...state,
-        items: action.comments
-          .filter((c) => c.post_id === action.pId)
-          .map((c) => c.id),
+        items: [
+          ...new Set(
+            state.items.concat(
+              action.comments
+                .filter((c) => c.post_id === action.pId)
+                .map((c) => c.id)
+            )
+          ),
+        ],
+      };
+    case READ_POST_SUCCESS:
+      return {
+        ...state,
+        items: action.comments.map((c) => c.id),
       };
     default:
       return state;
@@ -66,6 +77,11 @@ export const commentsByPostId = (
           },
           {}
         ),
+      };
+    case READ_POST_SUCCESS:
+      return {
+        ...state,
+        [action.post.id]: comments(state[action.post.id], action),
       };
     default:
       return state;

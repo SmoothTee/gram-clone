@@ -1,0 +1,14 @@
+.like_button {
+  margin-left: auto;
+  display: flex;
+  border: none;
+  background: none;
+}
+
+.like_button:hover {
+  cursor: pointer;
+}
+
+.filled_heart {
+  color: var(--red);
+}

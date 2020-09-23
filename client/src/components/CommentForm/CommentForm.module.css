@@ -1,0 +1,29 @@
+.form {
+  display: flex;
+  border-top: 1px solid var(--darker-grey);
+  height: 2.6rem;
+}
+
+.input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  line-height: 1.8;
+  resize: none;
+  outline: none;
+  border: none;
+}
+
+.button {
+  font-weight: 700;
+  padding: 0.5rem;
+  border: none;
+  background: none;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button:disabled {
+  pointer-events: none;
+}
