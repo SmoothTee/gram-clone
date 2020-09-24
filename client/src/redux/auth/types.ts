@@ -22,6 +22,9 @@ export interface User {
   created_at: string;
   updated_at: string;
   avatar_url?: string;
+  num_of_posts: number;
+  num_of_followers: number;
+  num_of_followings: number;
 }
 
 export interface AuthState {

@@ -5,7 +5,7 @@ import { uploadFromBuffer } from '../utils/uploadFromBuffer';
 import { User, UserWithoutPassword } from './auth';
 import { PostComment, CommentLike } from './comment';
 
-interface Post {
+export interface Post {
   id: number;
   user_id: number;
   caption: string;
@@ -13,7 +13,7 @@ interface Post {
   created_at: string;
 }
 
-interface PostMedia {
+export interface PostMedia {
   id: number;
   public_id: number;
   media_type: string;
@@ -22,7 +22,7 @@ interface PostMedia {
   created_at: string;
 }
 
-interface PostLike {
+export interface PostLike {
   post_id: number;
   user_id: number;
   updated_at: string;

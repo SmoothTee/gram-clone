@@ -1,0 +1,18 @@
+.tab_item {
+  display: flex;
+  align-items: center;
+  color: var(--grey);
+  padding: 1rem;
+  border-top: 1px solid transparent;
+  text-decoration: none;
+  margin-top: -1px;
+}
+
+.tab_item > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.active {
+  border-color: black;
+  color: black;
+}

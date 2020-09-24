@@ -18,6 +18,7 @@ import {
   UNLIKE_COMMENT_SUCCESS,
 } from "../comment/constants";
 import { PostComment } from "../comment/types";
+import { READ_PROFILE_FAILURE, READ_PROFILE_SUCCESS } from "../user/constants";
 
 const userInitialState: EntityInitialState<User> = {
   byId: {},
@@ -45,6 +46,14 @@ const users = (state = userInitialState, action: ActionTypes) => {
             acc[curr.id] = curr;
             return acc;
           }, {}),
+        },
+      };
+    case READ_PROFILE_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.user.id]: action.user,
         },
       };
     default:
@@ -134,6 +143,17 @@ const posts = (state = postInitialState, action: ActionTypes) => {
           [action.post.id]: action.post,
         },
       };
+    case READ_PROFILE_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          ...action.posts.reduce<{ [key: number]: Post }>((acc, curr) => {
+            acc[curr.id] = curr;
+            return acc;
+          }, {}),
+        },
+      };
     default:
       return state;
   }
@@ -160,6 +180,20 @@ const postMedia = (state = postMediaInitialState, action: ActionTypes) => {
         },
       };
     case READ_POST_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          ...action.postMedia.reduce<{ [key: number]: PostMedia }>(
+            (acc, curr) => {
+              acc[curr.id] = curr;
+              return acc;
+            },
+            {}
+          ),
+        },
+      };
+    case READ_PROFILE_SUCCESS:
       return {
         ...state,
         byId: {

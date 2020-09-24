@@ -40,7 +40,10 @@ export const App = () => {
         <ProtectedRoute exact path="/post/:post_id">
           <Post />
         </ProtectedRoute>
-        <ProtectedRoute exact path="/profile/:username">
+        <ProtectedRoute
+          exact
+          path={["/profile/:username/", "/profile/:username/saved"]}
+        >
           <Profile />
         </ProtectedRoute>
         <ProtectedRoute exact path="/settings/:action">

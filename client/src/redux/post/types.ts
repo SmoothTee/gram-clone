@@ -65,10 +65,11 @@ export interface PostState {
   isFetching: boolean;
 }
 
-export interface PostFeedState {
+export interface PostsState {
   items: number[];
-  isCreating: boolean;
+  isCreating?: boolean;
   isFetching: boolean;
+  lastUpdated: string | null;
 }
 
 interface CreatePostRequestAction {

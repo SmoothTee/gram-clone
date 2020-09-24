@@ -1,12 +1,13 @@
 import { READ_POSTS_SUCCESS, READ_POST_SUCCESS } from "../post/constants";
-import { PostActionTypes } from "../post/types";
+import { ActionTypes } from "../types";
+import { READ_PROFILE_SUCCESS } from "../user/constants";
 import { PostMediaState } from "./types";
 
 const initialState: PostMediaState = {
   byPostId: {},
 };
 
-export const postMedia = (state = initialState, action: PostActionTypes) => {
+export const postMedia = (state = initialState, action: ActionTypes) => {
   switch (action.type) {
     case READ_POSTS_SUCCESS:
       return {
@@ -32,6 +33,20 @@ export const postMedia = (state = initialState, action: PostActionTypes) => {
         byPostId: {
           ...state.byPostId,
           [action.post.id]: action.postMedia.map((pM) => pM.id),
+        },
+      };
+    case READ_PROFILE_SUCCESS:
+      return {
+        ...state,
+        byPostId: {
+          ...state.byPostId,
+          ...action.postMedia.reduce<{ [key: number]: number[] }>(
+            (acc, curr) => {
+              acc[curr.post_id] = [curr.id];
+              return acc;
+            },
+            {}
+          ),
         },
       };
     default:

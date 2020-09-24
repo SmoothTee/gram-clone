@@ -2,6 +2,7 @@ import reduxThunk from "redux-thunk";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 import { auth } from "./auth";
+import { profileByUsername, postsByUsername } from "./user";
 import { modal } from "./modal";
 import { post, postFeed } from "./post";
 import { postMedia } from "./postMedia";
@@ -13,10 +14,12 @@ import { LOGOUT_SUCCESS } from "./auth/constants";
 
 export const appReducer = combineReducers({
   auth,
+  profileByUsername,
   modal,
   post,
   postFeed,
   postMedia,
+  postsByUsername,
   commentsByPostId,
   entities,
   error,

@@ -3,6 +3,7 @@ import { Action } from "redux";
 
 import { appReducer } from "./index";
 import { AuthActionTypes } from "./auth/types";
+import { UserActionTypes } from "./user/types";
 import { PostActionTypes } from "./post/types";
 import { CommentActionTypes } from "./comment/types";
 
@@ -19,5 +20,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 
 export type ActionTypes =
   | AuthActionTypes
+  | UserActionTypes
   | PostActionTypes
   | CommentActionTypes;
