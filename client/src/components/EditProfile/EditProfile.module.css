@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  padding: 1rem;
+}
+
+.form > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.form > button {
+  display: block;
+  margin-left: auto;
+}

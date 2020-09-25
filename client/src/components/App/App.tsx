@@ -46,7 +46,10 @@ export const App = () => {
         >
           <Profile />
         </ProtectedRoute>
-        <ProtectedRoute exact path="/settings/:action">
+        <ProtectedRoute
+          exact
+          path={["/settings/edit-profile", "/settings/change-password"]}
+        >
           <Settings />
         </ProtectedRoute>
       </Switch>

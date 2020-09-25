@@ -34,7 +34,7 @@ export const NavBar = () => {
       <NavLink
         className={styles.link}
         activeClassName={styles.active}
-        to="/settings/edit"
+        to="/settings/edit-profile"
       >
         <AiOutlineSetting />
       </NavLink>
