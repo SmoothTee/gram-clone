@@ -1,9 +1,12 @@
+import bcrypt from 'bcrypt';
+
 import { db } from '../database';
 import { AppError } from '../utils';
 import { userSerializer } from '../utils/serializer';
 import { User, UserWithoutPassword } from './auth';
 import { PostComment } from './comment';
 import { Post, PostLike, PostMedia } from './post';
+import { config } from '../config';
 
 export const readProfile = async (
   username: string
@@ -97,4 +100,53 @@ export const readProfile = async (
   });
 
   return result;
+};
+
+export const updateUser = async (
+  data: UserWithoutPassword,
+  userId: number
+): Promise<UserWithoutPassword> => {
+  console.log('Data', data);
+  const user = (
+    await db<User>('public.user')
+      .update({ ...data, updated_at: db.fn.now() }, '*')
+      .where('id', userId)
+  )[0];
+
+  return userSerializer(user);
+};
+
+export const changePassword = async (
+  data: {
+    old_password: string;
+    new_password: string;
+    confirm_new_password: string;
+  },
+  userId: number
+): Promise<UserWithoutPassword> => {
+  const { old_password, new_password } = data;
+
+  const user = await db<User>('public.user').first().where('id', userId);
+
+  if (!user) {
+    throw new AppError(404, 'User not found.');
+  }
+
+  const match = await bcrypt.compare(old_password, user.password);
+  if (!match) {
+    throw new AppError(401, 'Invalid input.', {
+      old_password: 'Password is invalid.',
+    });
+  }
+
+  const hashedPassword = await bcrypt.hash(
+    new_password,
+    Number(config.hashSalt)
+  );
+
+  const newUser = (
+    await db<User>('public.user').update({ password: hashedPassword }, '*')
+  )[0];
+
+  return userSerializer(newUser);
 };

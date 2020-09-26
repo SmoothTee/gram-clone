@@ -67,3 +67,16 @@
   grid-auto-rows: 1fr;
   gap: 1rem;
 }
+
+.post_grid::before {
+  content: "";
+  width: 0;
+  padding-bottom: 100%;
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.post_grid > *:first-child {
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}

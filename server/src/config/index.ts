@@ -9,4 +9,5 @@ export const config = {
   cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
   cloudinarySecret: process.env.CLOUDINARY_SECRET,
   cloudinaryKey: process.env.CLOUDINARY_KEY,
+  hashSalt: process.env.HASH_SALT,
 };

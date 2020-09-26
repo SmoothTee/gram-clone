@@ -14,7 +14,10 @@ import styles from "./NavBar.module.css";
 export const NavBar = () => {
   const dispatch = useDispatch();
 
-  const username = useTypedSelector((state) => state.auth.session?.username);
+  const sessionId = useTypedSelector((state) => state.auth.session);
+  const users = useTypedSelector((state) => state.entities.users);
+
+  const user = users.byId[sessionId as number];
 
   return (
     <nav className={styles.nav_bar}>
@@ -27,7 +30,7 @@ export const NavBar = () => {
       <NavLink
         className={styles.link}
         activeClassName={styles.active}
-        to={`/profile/${username}`}
+        to={`/profile/${user.username}`}
       >
         <AiOutlineUser />
       </NavLink>

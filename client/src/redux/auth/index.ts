@@ -30,7 +30,7 @@ export const auth = (state = initialState, action: AuthActionTypes) => {
     case REGISTER_SUCCESS:
       return {
         ...state,
-        session: action.payload,
+        session: action.payload.id,
         isAuthenticated: true,
         isFetching: false,
       };
@@ -44,7 +44,7 @@ export const auth = (state = initialState, action: AuthActionTypes) => {
     case ME_SUCCESS:
       return {
         ...state,
-        session: action.payload,
+        session: action.payload.id,
         isAuthenticated: true,
         isFetching: false,
         didRequest: true,

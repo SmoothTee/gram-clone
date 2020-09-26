@@ -4,6 +4,9 @@ import {
   READ_PROFILE_FAILURE,
   READ_PROFILE_REQUEST,
   READ_PROFILE_SUCCESS,
+  UPDATE_USER_FAILURE,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
 } from "./constants";
 
 export interface UserState {
@@ -31,7 +34,24 @@ interface ReadProfileFailureAction {
   username: string;
 }
 
+interface UpdateUserRequestAction {
+  type: typeof UPDATE_USER_REQUEST;
+}
+
+interface UpdateUserSuccessAction {
+  type: typeof UPDATE_USER_SUCCESS;
+  user: User;
+}
+
+interface UpdateUserFailureAction {
+  type: typeof UPDATE_USER_FAILURE;
+  error: any;
+}
+
 export type UserActionTypes =
   | ReadProfileRequestAction
   | ReadProfileSuccessAction
-  | ReadProfileFailureAction;
+  | ReadProfileFailureAction
+  | UpdateUserRequestAction
+  | UpdateUserSuccessAction
+  | UpdateUserFailureAction;

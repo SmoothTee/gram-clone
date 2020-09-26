@@ -18,7 +18,8 @@ import {
   UNLIKE_COMMENT_SUCCESS,
 } from "../comment/constants";
 import { PostComment } from "../comment/types";
-import { READ_PROFILE_FAILURE, READ_PROFILE_SUCCESS } from "../user/constants";
+import { READ_PROFILE_SUCCESS, UPDATE_USER_SUCCESS } from "../user/constants";
+import { LOGIN_SUCCESS, ME_SUCCESS, REGISTER_SUCCESS } from "../auth/constants";
 
 const userInitialState: EntityInitialState<User> = {
   byId: {},
@@ -26,6 +27,16 @@ const userInitialState: EntityInitialState<User> = {
 
 const users = (state = userInitialState, action: ActionTypes) => {
   switch (action.type) {
+    case REGISTER_SUCCESS:
+    case LOGIN_SUCCESS:
+    case ME_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.payload.id]: action.payload,
+        },
+      };
     case READ_POSTS_SUCCESS:
       return {
         ...state,
@@ -49,6 +60,7 @@ const users = (state = userInitialState, action: ActionTypes) => {
         },
       };
     case READ_PROFILE_SUCCESS:
+    case UPDATE_USER_SUCCESS:
       return {
         ...state,
         byId: {

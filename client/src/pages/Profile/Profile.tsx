@@ -75,7 +75,7 @@ export const Profile = () => {
             </Tab>
             <div className={styles.post_grid}>
               {postIds.map((pId) => (
-                <PostQuadrat postId={pId} />
+                <PostQuadrat key={pId} postId={pId} />
               ))}
             </div>
           </div>

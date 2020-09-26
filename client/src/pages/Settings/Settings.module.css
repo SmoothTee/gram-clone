@@ -12,6 +12,7 @@
   max-width: 40rem;
   width: 100%;
   border: 1px solid var(--darker-grey);
+  background: white;
 }
 
 .sidebar {

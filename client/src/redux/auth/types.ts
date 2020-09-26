@@ -25,10 +25,12 @@ export interface User {
   num_of_posts: number;
   num_of_followers: number;
   num_of_followings: number;
+  website?: string;
+  bio?: string;
 }
 
 export interface AuthState {
-  session: User | null;
+  session: number | null;
   isAuthenticated: boolean;
   isFetching: boolean;
   didRequest: boolean;
