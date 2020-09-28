@@ -283,7 +283,7 @@ export const readPost = async (post_id: number, session: Express.Session) => {
       postQuery = postQuery
         .leftJoin(
           trx<SavedPost>('saved_post')
-            .first()
+            .select()
             .where('user_id', session.userId)
             .as('saved_post'),
           'saved_post.post_id',

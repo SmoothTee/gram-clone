@@ -18,5 +18,6 @@ router.post(
 );
 router.get('/logout', authController.logout);
 router.get('/me', protect, authController.me);
+router.post('/github-login', authController.githubLogin);
 
 export const auth = router;

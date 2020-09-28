@@ -3,5 +3,6 @@ declare namespace NodeJS {
     SESSION_NAME: string;
     SESSION_SECRET: string;
     NODE_ENV: string;
+    GITHUB_CLIENT_ID: string;
   }
 }

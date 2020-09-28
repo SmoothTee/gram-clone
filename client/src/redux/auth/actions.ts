@@ -12,6 +12,9 @@ import {
   ME_REQUEST,
   ME_SUCCESS,
   ME_FAILURE,
+  GITHUB_LOGIN_FAILURE,
+  GITHUB_LOGIN_REQUEST,
+  GITHUB_LOGIN_SUCCESS,
 } from "./constants";
 import { AppThunk } from "../types";
 import { clientFetch } from "../../utils/clientFetch";
@@ -21,9 +24,9 @@ const registerRequest = (): AuthActionTypes => ({
   type: REGISTER_REQUEST,
 });
 
-const registerSuccess = (payload: User): AuthActionTypes => ({
+const registerSuccess = (user: User): AuthActionTypes => ({
   type: REGISTER_SUCCESS,
-  payload,
+  user,
 });
 
 const registerFailure = (error: any): AuthActionTypes => ({
@@ -35,9 +38,9 @@ const loginRequest = (): AuthActionTypes => ({
   type: LOGIN_REQUEST,
 });
 
-const loginSuccess = (payload: User): AuthActionTypes => ({
+const loginSuccess = (user: User): AuthActionTypes => ({
   type: LOGIN_SUCCESS,
-  payload,
+  user,
 });
 
 const loginFailure = (error: any): AuthActionTypes => ({
@@ -62,13 +65,27 @@ const meRequest = (): AuthActionTypes => ({
   type: ME_REQUEST,
 });
 
-const meSuccess = (payload: User): AuthActionTypes => ({
+const meSuccess = (user: User): AuthActionTypes => ({
   type: ME_SUCCESS,
-  payload,
+  user,
 });
 
 const meFailure = (error: any): AuthActionTypes => ({
   type: ME_FAILURE,
+  error,
+});
+
+const githubLoginRequest = (): AuthActionTypes => ({
+  type: GITHUB_LOGIN_REQUEST,
+});
+
+const githubLoginSuccess = (user: User): AuthActionTypes => ({
+  type: GITHUB_LOGIN_SUCCESS,
+  user,
+});
+
+const githubLoginFailure = (error: any): AuthActionTypes => ({
+  type: GITHUB_LOGIN_FAILURE,
   error,
 });
 
@@ -131,5 +148,23 @@ export const meAction = (): AppThunk => async (dispatch) => {
     }
   } catch (err) {
     dispatch(meFailure(`Failed to me: ${err}`));
+  }
+};
+
+export const githubLoginAction = (code: string): AppThunk => async (
+  dispatch
+) => {
+  try {
+    dispatch(githubLoginRequest());
+    const { success, res } = await clientFetch("/api/auth/github-login", {
+      body: { code },
+    });
+    if (success) {
+      dispatch(githubLoginSuccess(res.user));
+    } else {
+      dispatch(githubLoginFailure(res));
+    }
+  } catch (err) {
+    dispatch(githubLoginFailure(`Failed to login with github: ${err}`));
   }
 };

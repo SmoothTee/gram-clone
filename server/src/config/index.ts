@@ -10,4 +10,6 @@ export const config = {
   cloudinarySecret: process.env.CLOUDINARY_SECRET,
   cloudinaryKey: process.env.CLOUDINARY_KEY,
   hashSalt: process.env.HASH_SALT,
+  githubClientId: process.env.GITHUB_CLIENT_ID,
+  githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
 };

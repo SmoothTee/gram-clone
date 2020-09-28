@@ -1,6 +1,9 @@
 import { User } from "../auth/types";
 import { Post, PostMedia } from "../post/types";
 import {
+  CHANGE_PASSWORD_FAILURE,
+  CHANGE_PASSWORD_REQUEST,
+  CHANGE_PASSWORD_SUCCESS,
   READ_PROFILE_FAILURE,
   READ_PROFILE_REQUEST,
   READ_PROFILE_SUCCESS,
@@ -48,10 +51,26 @@ interface UpdateUserFailureAction {
   error: any;
 }
 
+interface ChangePasswordRequestAction {
+  type: typeof CHANGE_PASSWORD_REQUEST;
+}
+
+interface ChangePasswordSuccessAction {
+  type: typeof CHANGE_PASSWORD_SUCCESS;
+}
+
+interface ChangePasswordFailureAction {
+  type: typeof CHANGE_PASSWORD_FAILURE;
+  error?: any;
+}
+
 export type UserActionTypes =
   | ReadProfileRequestAction
   | ReadProfileSuccessAction
   | ReadProfileFailureAction
   | UpdateUserRequestAction
   | UpdateUserSuccessAction
-  | UpdateUserFailureAction;
+  | UpdateUserFailureAction
+  | ChangePasswordRequestAction
+  | ChangePasswordSuccessAction
+  | ChangePasswordFailureAction;

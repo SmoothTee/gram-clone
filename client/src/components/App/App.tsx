@@ -13,6 +13,7 @@ import { ProtectedRoute } from "../ProtectedRoute/ProtectedRoute";
 import { Settings } from "../../pages/Settings";
 import { ModalManager } from "../ModalManager";
 import { Post } from "../../pages/Post";
+import { Github } from "../../pages/Github";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,9 @@ export const App = () => {
       <Switch>
         <Route exact path="/">
           <Home />
+        </Route>
+        <Route exact path="/github-login">
+          <Github />
         </Route>
         <AuthRoute exact path="/register">
           <Register />

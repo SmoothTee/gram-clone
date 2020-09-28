@@ -3,6 +3,9 @@ import { User } from "../auth/types";
 import { Post, PostMedia } from "../post/types";
 import { AppThunk } from "../types";
 import {
+  CHANGE_PASSWORD_FAILURE,
+  CHANGE_PASSWORD_REQUEST,
+  CHANGE_PASSWORD_SUCCESS,
   READ_PROFILE_FAILURE,
   READ_PROFILE_REQUEST,
   READ_PROFILE_SUCCESS,
@@ -49,6 +52,19 @@ const updateUserFailure = (error: any): UserActionTypes => ({
   error,
 });
 
+const changePasswordRequest = (): UserActionTypes => ({
+  type: CHANGE_PASSWORD_REQUEST,
+});
+
+const changePasswordSuccess = (): UserActionTypes => ({
+  type: CHANGE_PASSWORD_SUCCESS,
+});
+
+const changePasswordFailure = (error?: any): UserActionTypes => ({
+  type: CHANGE_PASSWORD_FAILURE,
+  error,
+});
+
 export const readProfileAction = (username: string): AppThunk => async (
   dispatch
 ) => {
@@ -84,5 +100,24 @@ export const updateUserAction = <T>(
     }
   } catch (err) {
     dispatch(updateUserFailure(`Failed to update user: ${err}`));
+  }
+};
+
+export const changePasswordAction = <T>(body: T): AppThunk => async (
+  dispatch
+) => {
+  try {
+    dispatch(changePasswordRequest());
+    const { success } = await clientFetch("/api/user/change-password", {
+      method: "PATCH",
+      body,
+    });
+    if (success) {
+      dispatch(changePasswordSuccess());
+    } else {
+      dispatch(changePasswordFailure());
+    }
+  } catch (err) {
+    dispatch(changePasswordFailure(`Failed to change password: ${err}`));
   }
 };

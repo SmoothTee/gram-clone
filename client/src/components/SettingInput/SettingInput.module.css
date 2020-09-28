@@ -11,6 +11,10 @@
   font-weight: 700;
 }
 
+.input_wrapper {
+  position: relative;
+}
+
 .input {
   border: 1px solid var(--darker-grey);
   padding: 0.8rem 1rem;
@@ -20,4 +24,16 @@
 
 .input:focus {
   border-color: var(--blue);
+}
+
+.input_error {
+  border-color: var(--red);
+}
+
+.error_message {
+  position: absolute;
+  left: 0;
+  bottom: -1rem;
+  font-size: 0.8rem;
+  color: var(--red);
 }

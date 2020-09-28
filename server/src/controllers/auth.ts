@@ -36,3 +36,11 @@ export const me = catchError(async (req, res) => {
 
   res.json({ user });
 });
+
+export const githubLogin = catchError(async (req, res) => {
+  const user = await authService.githubLogin(req.body.code);
+
+  req.session.userId = user.id;
+
+  res.json({ user });
+});

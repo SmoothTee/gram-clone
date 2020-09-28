@@ -19,7 +19,12 @@ import {
 } from "../comment/constants";
 import { PostComment } from "../comment/types";
 import { READ_PROFILE_SUCCESS, UPDATE_USER_SUCCESS } from "../user/constants";
-import { LOGIN_SUCCESS, ME_SUCCESS, REGISTER_SUCCESS } from "../auth/constants";
+import {
+  GITHUB_LOGIN_SUCCESS,
+  LOGIN_SUCCESS,
+  ME_SUCCESS,
+  REGISTER_SUCCESS,
+} from "../auth/constants";
 
 const userInitialState: EntityInitialState<User> = {
   byId: {},
@@ -30,11 +35,12 @@ const users = (state = userInitialState, action: ActionTypes) => {
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
     case ME_SUCCESS:
+    case GITHUB_LOGIN_SUCCESS:
       return {
         ...state,
         byId: {
           ...state.byId,
-          [action.payload.id]: action.payload,
+          [action.user.id]: action.user,
         },
       };
     case READ_POSTS_SUCCESS:

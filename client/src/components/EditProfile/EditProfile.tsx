@@ -23,7 +23,7 @@ const schema = yup.object().shape({
   full_name: yup.string().required(),
   username: yup.string().required(),
   email: yup.string().email().required(),
-  website: yup.string().url(),
+  website: yup.string().url("Website URL is invalid"),
   bio: yup.string(),
 });
 
@@ -69,11 +69,36 @@ export const EditProfile = () => {
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <SettingInput label="Name" name="full_name" ref={register} />
-        <SettingInput label="Username" name="username" ref={register} />
-        <SettingInput label="Website" name="website" ref={register} />
-        <SettingInput label="Bio" name="bio" ref={register} />
-        <SettingInput label="Email" name="email" ref={register} />
+        <SettingInput
+          label="Name"
+          name="full_name"
+          error={errors.full_name?.message}
+          ref={register}
+        />
+        <SettingInput
+          label="Username"
+          name="username"
+          error={errors.username?.message}
+          ref={register}
+        />
+        <SettingInput
+          label="Website"
+          name="website"
+          error={formState.touched.website ? errors.website?.message : ""}
+          ref={register}
+        />
+        <SettingInput
+          label="Bio"
+          name="bio"
+          error={errors.bio?.message}
+          ref={register}
+        />
+        <SettingInput
+          label="Email"
+          name="email"
+          error={errors.email?.message}
+          ref={register}
+        />
         <Button type="submit" disabled={!formState.isValid}>
           Save
         </Button>

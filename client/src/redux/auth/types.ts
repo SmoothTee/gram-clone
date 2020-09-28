@@ -11,6 +11,9 @@ import {
   ME_REQUEST,
   ME_SUCCESS,
   ME_FAILURE,
+  GITHUB_LOGIN_REQUEST,
+  GITHUB_LOGIN_SUCCESS,
+  GITHUB_LOGIN_FAILURE,
 } from "./constants";
 
 export interface User {
@@ -42,7 +45,7 @@ interface RegisterRequestAction {
 
 interface RegisterSuccessAction {
   type: typeof REGISTER_SUCCESS;
-  payload: User;
+  user: User;
 }
 
 interface RegisterFailureAction {
@@ -56,7 +59,7 @@ interface LoginRequestAction {
 
 interface LoginSuccessAction {
   type: typeof LOGIN_SUCCESS;
-  payload: User;
+  user: User;
 }
 
 interface LoginFailureAction {
@@ -83,11 +86,25 @@ interface MeRequestAction {
 
 interface MeSuccessAction {
   type: typeof ME_SUCCESS;
-  payload: User;
+  user: User;
 }
 
 interface MeFailureAction {
   type: typeof ME_FAILURE;
+  error: any;
+}
+
+interface GithubLoginRequestAction {
+  type: typeof GITHUB_LOGIN_REQUEST;
+}
+
+interface GithubLoginSuccessAction {
+  type: typeof GITHUB_LOGIN_SUCCESS;
+  user: User;
+}
+
+interface GithubLoginFailureAction {
+  type: typeof GITHUB_LOGIN_FAILURE;
   error: any;
 }
 
@@ -103,4 +120,7 @@ export type AuthActionTypes =
   | LogoutFailureAction
   | MeRequestAction
   | MeSuccessAction
-  | MeFailureAction;
+  | MeFailureAction
+  | GithubLoginRequestAction
+  | GithubLoginSuccessAction
+  | GithubLoginFailureAction;

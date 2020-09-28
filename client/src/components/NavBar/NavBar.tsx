@@ -19,6 +19,8 @@ export const NavBar = () => {
 
   const user = users.byId[sessionId as number];
 
+  console.log("User", user);
+
   return (
     <nav className={styles.nav_bar}>
       <button
