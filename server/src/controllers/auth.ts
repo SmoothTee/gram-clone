@@ -44,3 +44,9 @@ export const githubLogin = catchError(async (req, res) => {
 
   res.json({ user });
 });
+
+export const forgotPassword = catchError(async (req, res) => {
+  const success = await authService.forgotPassword(req.body.email);
+
+  res.json({ success });
+});

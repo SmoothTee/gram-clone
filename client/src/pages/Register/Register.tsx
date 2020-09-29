@@ -11,6 +11,7 @@ import { Button } from "../../components/Button";
 import { useDispatch } from "react-redux";
 import { registerAction } from "../../redux/auth/actions";
 import { useTypedSelector } from "../../redux/hooks";
+import { CenterBox } from "../../components/CenterBox";
 
 interface IFormInputs {
   email: string;
@@ -63,78 +64,75 @@ export const Register = () => {
   }, [error, setError]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
-        <Logo />
-        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            label="Email"
-            name="email"
-            error={
-              formState.touched.email && errors.email?.message
-                ? errors.email?.message
-                : ""
-            }
-            ref={register}
-          />
-          <Input
-            label="Full Name"
-            name="full_name"
-            error={
-              formState.touched.full_name && errors.full_name?.message
-                ? errors.full_name?.message
-                : ""
-            }
-            ref={register}
-          />
-          <Input
-            label="Username"
-            name="username"
-            error={
-              formState.touched.username && errors.username?.message
-                ? errors.username?.message
-                : ""
-            }
-            ref={register}
-          />
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            error={
-              formState.touched.password && errors.password?.message
-                ? errors.password?.message
-                : ""
-            }
-            ref={register}
-          />
-          <Input
-            label="Confirm Password"
-            name="confirmPassword"
-            type="password"
-            error={
-              formState.touched.confirmPassword &&
-              errors.confirmPassword?.message
-                ? errors.confirmPassword?.message
-                : ""
-            }
-            ref={register}
-          />
-          <Button
-            type="submit"
-            loading={isFetching}
-            disabled={!formState.isValid}
-          >
-            Register
-          </Button>
-        </form>
-        <span className={styles.login}>
-          Have an Account?{" "}
-          <Link className={styles.link} to="/">
-            Log In
-          </Link>
-        </span>
-      </div>
-    </div>
+    <CenterBox>
+      <Logo />
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          label="Email"
+          name="email"
+          error={
+            formState.touched.email && errors.email?.message
+              ? errors.email?.message
+              : ""
+          }
+          ref={register}
+        />
+        <Input
+          label="Full Name"
+          name="full_name"
+          error={
+            formState.touched.full_name && errors.full_name?.message
+              ? errors.full_name?.message
+              : ""
+          }
+          ref={register}
+        />
+        <Input
+          label="Username"
+          name="username"
+          error={
+            formState.touched.username && errors.username?.message
+              ? errors.username?.message
+              : ""
+          }
+          ref={register}
+        />
+        <Input
+          label="Password"
+          name="password"
+          type="password"
+          error={
+            formState.touched.password && errors.password?.message
+              ? errors.password?.message
+              : ""
+          }
+          ref={register}
+        />
+        <Input
+          label="Confirm Password"
+          name="confirmPassword"
+          type="password"
+          error={
+            formState.touched.confirmPassword && errors.confirmPassword?.message
+              ? errors.confirmPassword?.message
+              : ""
+          }
+          ref={register}
+        />
+        <Button
+          type="submit"
+          loading={isFetching}
+          disabled={!formState.isValid}
+        >
+          Register
+        </Button>
+      </form>
+      <span className={styles.login}>
+        Have an Account?{" "}
+        <Link className={styles.link} to="/">
+          Log In
+        </Link>
+      </span>
+    </CenterBox>
   );
 };

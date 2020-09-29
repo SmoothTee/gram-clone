@@ -15,6 +15,9 @@ import {
   GITHUB_LOGIN_FAILURE,
   GITHUB_LOGIN_REQUEST,
   GITHUB_LOGIN_SUCCESS,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_FAILURE,
 } from "./constants";
 import { AppThunk } from "../types";
 import { clientFetch } from "../../utils/clientFetch";
@@ -86,6 +89,19 @@ const githubLoginSuccess = (user: User): AuthActionTypes => ({
 
 const githubLoginFailure = (error: any): AuthActionTypes => ({
   type: GITHUB_LOGIN_FAILURE,
+  error,
+});
+
+const forgotPasswordRequest = (): AuthActionTypes => ({
+  type: FORGOT_PASSWORD_REQUEST,
+});
+
+const forgotPasswordSuccess = (): AuthActionTypes => ({
+  type: FORGOT_PASSWORD_SUCCESS,
+});
+
+const forgotPasswordFailure = (error: any): AuthActionTypes => ({
+  type: FORGOT_PASSWORD_FAILURE,
   error,
 });
 
@@ -166,5 +182,23 @@ export const githubLoginAction = (code: string): AppThunk => async (
     }
   } catch (err) {
     dispatch(githubLoginFailure(`Failed to login with github: ${err}`));
+  }
+};
+
+export const forgotPasswordAction = (email: string): AppThunk => async (
+  dispatch
+) => {
+  try {
+    dispatch(forgotPasswordRequest());
+    const { success, res } = await clientFetch("/api/auth/forgot-password", {
+      body: { email },
+    });
+    if (success) {
+      dispatch(forgotPasswordSuccess());
+    } else {
+      dispatch(forgotPasswordFailure(res));
+    }
+  } catch (err) {
+    dispatch(forgotPasswordFailure(`Failed to forgot password: ${err}`));
   }
 };

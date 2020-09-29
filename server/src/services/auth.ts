@@ -1,10 +1,16 @@
 import bcrypt from 'bcrypt';
 import fetch from 'node-fetch';
+import crypto from 'crypto';
+import Redis from 'ioredis';
 
 import { db } from '../database';
 import { AppError, DuplicationError } from '../utils/appError';
 import { userSerializer } from '../utils/serializer';
 import { config } from '../config';
+import { sendEmail } from '../utils/sendEmail';
+import { FORGOT_PASSWORD_PREFIX } from '../constants';
+
+const redis = new Redis();
 
 export interface User {
   id: number;
@@ -95,7 +101,9 @@ export const me = async (userId: number): Promise<UserWithoutPassword> => {
   return userSerializer(user);
 };
 
-export const githubLogin = async (code: string) => {
+export const githubLogin = async (
+  code: string
+): Promise<UserWithoutPassword> => {
   const url = 'https://github.com/login/oauth/access_token';
 
   const { githubClientId, githubClientSecret } = config;
@@ -150,4 +158,28 @@ export const githubLogin = async (code: string) => {
   const newUser = (await db<User>('public.user').insert(data, '*'))[0];
 
   return userSerializer(newUser);
+};
+
+export const forgotPassword = async (email: string): Promise<string> => {
+  const user = await db<User>('public.user').first().where('email', email);
+
+  if (!user) {
+    throw new AppError(404, 'User not found.');
+  }
+
+  const token = crypto.randomBytes(20).toString('hex');
+
+  await redis.set(
+    FORGOT_PASSWORD_PREFIX + token,
+    user.id,
+    'ex',
+    config.forgotPasswordDuration
+  );
+
+  sendEmail(
+    user.email,
+    `<a href='http://localhost:3000/reset-password?token=${token}'>Reset Password</a>`
+  );
+
+  return token;
 };

@@ -101,7 +101,12 @@ export const CreatePostModal = () => {
             value={caption}
             onChange={(event) => setCaption(event.target.value)}
           />
-          <Button type="submit">Create Post</Button>
+          <Button
+            type="submit"
+            disabled={files.length === 0 || caption.length === 0}
+          >
+            Create Post
+          </Button>
         </form>
       </div>
     </RootModal>

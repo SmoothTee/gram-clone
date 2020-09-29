@@ -19,5 +19,6 @@ router.post(
 router.get('/logout', authController.logout);
 router.get('/me', protect, authController.me);
 router.post('/github-login', authController.githubLogin);
+router.post('/forgot-password', authController.forgotPassword);
 
 export const auth = router;

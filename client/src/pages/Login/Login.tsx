@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginAction } from "../../redux/auth/actions";
 import { useTypedSelector } from "../../redux/hooks";
+import { CenterBox } from "../../components/CenterBox";
 
 interface IFormInputs {
   usernameOrEmail: string;
@@ -56,53 +57,51 @@ export const Login = () => {
   }, [error, setError]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
-        <Logo />
-        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            label="Username or Email"
-            name="usernameOrEmail"
-            error={
-              (formState.touched.usernameOrEmail || formState.isSubmitted) &&
-              errors.usernameOrEmail?.message
-                ? errors.usernameOrEmail?.message
-                : ""
-            }
-            ref={register}
-          />
-          <Input
-            label="Password"
-            name="password"
-            error={
-              (formState.touched.password || formState.isSubmitted) &&
-              errors.password?.message
-                ? errors.password?.message
-                : ""
-            }
-            type="password"
-            ref={register}
-          />
-          <Button
-            type="submit"
-            loading={isFetching}
-            disabled={!formState.isValid}
-          >
-            Log In
-          </Button>
-        </form>
-        <HorizontalDivider text="Or" />
-        <GithubLogin />
-        <Link className={styles.link} to="/forgot-password">
-          Forgot Password?
+    <CenterBox>
+      <Logo />
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          label="Username or Email"
+          name="usernameOrEmail"
+          error={
+            (formState.touched.usernameOrEmail || formState.isSubmitted) &&
+            errors.usernameOrEmail?.message
+              ? errors.usernameOrEmail?.message
+              : ""
+          }
+          ref={register}
+        />
+        <Input
+          label="Password"
+          name="password"
+          error={
+            (formState.touched.password || formState.isSubmitted) &&
+            errors.password?.message
+              ? errors.password?.message
+              : ""
+          }
+          type="password"
+          ref={register}
+        />
+        <Button
+          type="submit"
+          loading={isFetching}
+          disabled={!formState.isValid}
+        >
+          Log In
+        </Button>
+      </form>
+      <HorizontalDivider text="Or" />
+      <GithubLogin />
+      <Link className={styles.link} to="/forgot-password">
+        Forgot Password?
+      </Link>
+      <span className={styles.register}>
+        Need an Account?{" "}
+        <Link className={styles.link} to="/register">
+          Register
         </Link>
-        <span className={styles.register}>
-          Need an Account?{" "}
-          <Link className={styles.link} to="/register">
-            Register
-          </Link>
-        </span>
-      </div>
-    </div>
+      </span>
+    </CenterBox>
   );
 };

@@ -14,6 +14,9 @@ import {
   GITHUB_LOGIN_REQUEST,
   GITHUB_LOGIN_SUCCESS,
   GITHUB_LOGIN_FAILURE,
+  FORGOT_PASSWORD_FAILURE,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
 } from "./constants";
 
 export interface User {
@@ -108,6 +111,19 @@ interface GithubLoginFailureAction {
   error: any;
 }
 
+interface ForgotPasswordRequestAction {
+  type: typeof FORGOT_PASSWORD_REQUEST;
+}
+
+interface ForgotPasswordSuccessAction {
+  type: typeof FORGOT_PASSWORD_SUCCESS;
+}
+
+interface ForgotPasswordFailureAction {
+  type: typeof FORGOT_PASSWORD_FAILURE;
+  error: any;
+}
+
 export type AuthActionTypes =
   | RegisterRequestAction
   | RegisterSuccessAction
@@ -123,4 +139,7 @@ export type AuthActionTypes =
   | MeFailureAction
   | GithubLoginRequestAction
   | GithubLoginSuccessAction
-  | GithubLoginFailureAction;
+  | GithubLoginFailureAction
+  | ForgotPasswordRequestAction
+  | ForgotPasswordSuccessAction
+  | ForgotPasswordFailureAction;

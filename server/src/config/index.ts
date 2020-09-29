@@ -12,4 +12,7 @@ export const config = {
   hashSalt: process.env.HASH_SALT,
   githubClientId: process.env.GITHUB_CLIENT_ID,
   githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
+  emailUser: process.env.EMAIL_USER,
+  emailPass: process.env.EMAIL_PASS,
+  forgotPasswordDuration: process.env.FORGOT_PASSWORD_DURATION,
 };
