@@ -18,6 +18,9 @@ import {
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAILURE,
+  RESET_PASSWORD_FAILURE,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
 } from "./constants";
 import { AppThunk } from "../types";
 import { clientFetch } from "../../utils/clientFetch";
@@ -102,6 +105,20 @@ const forgotPasswordSuccess = (): AuthActionTypes => ({
 
 const forgotPasswordFailure = (error: any): AuthActionTypes => ({
   type: FORGOT_PASSWORD_FAILURE,
+  error,
+});
+
+const resetPasswordRequest = (): AuthActionTypes => ({
+  type: RESET_PASSWORD_REQUEST,
+});
+
+const resetPasswordSuccess = (user: User): AuthActionTypes => ({
+  type: RESET_PASSWORD_SUCCESS,
+  user,
+});
+
+const resetPasswordFailure = (error: any): AuthActionTypes => ({
+  type: RESET_PASSWORD_FAILURE,
   error,
 });
 
@@ -200,5 +217,25 @@ export const forgotPasswordAction = (email: string): AppThunk => async (
     }
   } catch (err) {
     dispatch(forgotPasswordFailure(`Failed to forgot password: ${err}`));
+  }
+};
+
+export const resetPasswordAction = (
+  newPassword: string,
+  confirmNewPassword: string,
+  token: string
+): AppThunk => async (dispatch) => {
+  try {
+    dispatch(resetPasswordRequest());
+    const { success, res } = await clientFetch("/api/auth/reset-password", {
+      body: { newPassword, confirmNewPassword, token },
+    });
+    if (success) {
+      dispatch(resetPasswordSuccess(res.user));
+    } else {
+      dispatch(resetPasswordFailure(res));
+    }
+  } catch (err) {
+    dispatch(resetPasswordFailure(`Failed to reset password: ${err}`));
   }
 };

@@ -15,6 +15,7 @@ import { ModalManager } from "../ModalManager";
 import { Post } from "../../pages/Post";
 import { Github } from "../../pages/Github";
 import { ForgotPassword } from "../../pages/ForgotPassword";
+import { ResetPassword } from "../../pages/ResetPassword";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -36,12 +37,15 @@ export const App = () => {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route exact path="/github-login">
+        <AuthRoute exact path="/github-login">
           <Github />
-        </Route>
-        <Route exact path="/forgot-password">
+        </AuthRoute>
+        <AuthRoute exact path="/forgot-password">
           <ForgotPassword />
-        </Route>
+        </AuthRoute>
+        <AuthRoute exact path="/reset-password/:token">
+          <ResetPassword />
+        </AuthRoute>
         <AuthRoute exact path="/register">
           <Register />
         </AuthRoute>

@@ -17,6 +17,9 @@ import {
   FORGOT_PASSWORD_FAILURE,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILURE,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
 } from "./constants";
 
 export interface User {
@@ -39,6 +42,7 @@ export interface AuthState {
   session: number | null;
   isAuthenticated: boolean;
   isFetching: boolean;
+  isSending: boolean;
   didRequest: boolean;
 }
 
@@ -124,6 +128,20 @@ interface ForgotPasswordFailureAction {
   error: any;
 }
 
+interface ResetPasswordRequestAction {
+  type: typeof RESET_PASSWORD_REQUEST;
+}
+
+interface ResetPasswordSuccessAction {
+  type: typeof RESET_PASSWORD_SUCCESS;
+  user: User;
+}
+
+interface ResetPasswordFailureAction {
+  type: typeof RESET_PASSWORD_FAILURE;
+  error: any;
+}
+
 export type AuthActionTypes =
   | RegisterRequestAction
   | RegisterSuccessAction
@@ -142,4 +160,7 @@ export type AuthActionTypes =
   | GithubLoginFailureAction
   | ForgotPasswordRequestAction
   | ForgotPasswordSuccessAction
-  | ForgotPasswordFailureAction;
+  | ForgotPasswordFailureAction
+  | ResetPasswordRequestAction
+  | ResetPasswordSuccessAction
+  | ResetPasswordFailureAction;

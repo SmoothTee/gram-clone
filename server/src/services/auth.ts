@@ -178,8 +178,41 @@ export const forgotPassword = async (email: string): Promise<string> => {
 
   sendEmail(
     user.email,
-    `<a href='http://localhost:3000/reset-password?token=${token}'>Reset Password</a>`
+    `<a href='http://localhost:3000/reset-password/${token}' target='_blank'>Reset Password</a>`
   );
 
   return token;
+};
+
+export const resetPassword = async (
+  newPassword: string,
+  token: string
+): Promise<UserWithoutPassword> => {
+  const redisKey = FORGOT_PASSWORD_PREFIX + token;
+  const userId = await redis.get(redisKey);
+
+  if (!userId) {
+    throw new AppError(401, 'Invalid token');
+  }
+
+  const user = await db<User>('public.user').first().where('id', userId);
+
+  if (!user) {
+    throw new AppError(404, 'User not found');
+  }
+
+  const hashedPassword = await bcrypt.hash(
+    newPassword,
+    Number(config.hashSalt)
+  );
+
+  const updatedUser = (
+    await db<User>('public.user')
+      .update({ password: hashedPassword }, '*')
+      .where('id', userId)
+  )[0];
+
+  await redis.del(redisKey);
+
+  return userSerializer(updatedUser);
 };

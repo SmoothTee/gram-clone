@@ -24,6 +24,7 @@ import {
   LOGIN_SUCCESS,
   ME_SUCCESS,
   REGISTER_SUCCESS,
+  RESET_PASSWORD_SUCCESS,
 } from "../auth/constants";
 
 const userInitialState: EntityInitialState<User> = {
@@ -36,6 +37,7 @@ const users = (state = userInitialState, action: ActionTypes) => {
     case LOGIN_SUCCESS:
     case ME_SUCCESS:
     case GITHUB_LOGIN_SUCCESS:
+    case RESET_PASSWORD_SUCCESS:
       return {
         ...state,
         byId: {

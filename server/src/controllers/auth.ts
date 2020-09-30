@@ -50,3 +50,13 @@ export const forgotPassword = catchError(async (req, res) => {
 
   res.json({ success });
 });
+
+export const resetPassword = catchError(async (req, res) => {
+  const { newPassword, token } = req.body;
+
+  const user = await authService.resetPassword(newPassword, token);
+
+  req.session.userId = user.id;
+
+  res.json({ user });
+});
