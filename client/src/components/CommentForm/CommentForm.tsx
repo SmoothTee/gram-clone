@@ -13,8 +13,8 @@ export const CommentForm = ({ postId }: CommentFormProps) => {
 
   const [text, setText] = useState("");
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = (event?: FormEvent) => {
+    if (event) event.preventDefault();
 
     dispatch(createCommentAction(postId, text, () => setText("")));
   };
@@ -26,6 +26,13 @@ export const CommentForm = ({ postId }: CommentFormProps) => {
         placeholder="Add a comment..."
         value={text}
         onChange={(event) => setText(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            handleSubmit();
+          } else {
+            return null;
+          }
+        }}
       />
       <button
         disabled={text.trim().length === 0}
