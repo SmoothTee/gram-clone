@@ -82,7 +82,10 @@ export const PostCard = ({ postId }: PostCardProps) => {
           </Link>
           <span className={styles.caption}>{post.caption}</span>
         </div>
-        <button className={styles.view_comments_button}>
+        <button
+          className={styles.view_comments_button}
+          onClick={() => dispatch(showModal("PostModal", { postId }))}
+        >
           <span className={styles.view_comments}>
             View all {post.num_of_comments} comment
             {post.num_of_comments === 1 ? "" : "s"}
