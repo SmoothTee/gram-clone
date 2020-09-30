@@ -1,0 +1,17 @@
+.item {
+  display: flex;
+  flex-direction: column;
+  max-width: 20rem;
+  width: 100%;
+}
+
+.button {
+  font-size: 1rem;
+  padding: 1rem;
+  border: none;
+  background: none;
+}
+
+.button:hover {
+  cursor: pointer;
+}

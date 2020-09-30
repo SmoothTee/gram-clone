@@ -10,9 +10,10 @@ Modal.setAppElement("#root");
 
 interface RootModalProps {
   children: ReactNode;
+  blank?: boolean;
 }
 
-export const RootModal = ({ children }: RootModalProps) => {
+export const RootModal = ({ children, blank = false }: RootModalProps) => {
   const dispatch = useDispatch();
 
   const hide = () => dispatch(hideModal());
@@ -22,14 +23,16 @@ export const RootModal = ({ children }: RootModalProps) => {
       <Modal
         isOpen={true}
         onRequestClose={hide}
-        className={styles.modal}
+        className={`${styles.modal} ${blank ? styles.no_padding : ""}`}
         overlayClassName={styles.overlay}
       >
-        <div className={styles.header}>
-          <button className={styles.close_button} onClick={hide}>
-            <AiOutlineClose />
-          </button>
-        </div>
+        {blank ? null : (
+          <div className={styles.header}>
+            <button className={styles.close_button} onClick={hide}>
+              <AiOutlineClose />
+            </button>
+          </div>
+        )}
         {children}
       </Modal>
     </div>

@@ -19,6 +19,10 @@
   background: none;
 }
 
+.dot_button:hover {
+  cursor: pointer;
+}
+
 .main {
   display: flex;
   flex-direction: column;

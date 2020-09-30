@@ -1,7 +1,8 @@
-import React, { FormEvent, useState } from "react";
+import React from "react";
 import moment from "moment";
 import { BsThreeDots } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import styles from "./PostCard.module.css";
 import { useTypedSelector } from "../../redux/hooks";
@@ -11,12 +12,18 @@ import { UserLink } from "../UserLink";
 import { CommentForm } from "../CommentForm";
 import { PostIcons } from "../PostIcons";
 import { PostLikes } from "../PostLikes";
+import { hideModal, showModal } from "../../redux/modal/actions";
+import { PostMenu } from "../PostMenu";
+import { PostMenuItem } from "../PostMenu/components/PostMenuItem";
 
 interface PostCardProps {
   postId: number;
 }
 
 export const PostCard = ({ postId }: PostCardProps) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const { users, posts } = useTypedSelector((state) => state.entities);
   const mediaByPostId = useTypedSelector((state) => state.postMedia.byPostId);
   const commentsByPostId = useTypedSelector((state) => state.commentsByPostId);
@@ -28,11 +35,40 @@ export const PostCard = ({ postId }: PostCardProps) => {
     ? commentsByPostId[postId].items
     : [];
 
+  const openPostMenu = () => {
+    const children = (
+      <PostMenu>
+        <PostMenuItem
+          label="Unfollow"
+          onClick={() => console.log("Unfollowed!")}
+        />
+        <PostMenuItem
+          label="Go to post"
+          onClick={() => {
+            history.push(`/post/${postId}`);
+            dispatch(hideModal());
+          }}
+        />
+        <PostMenuItem
+          label="Copy link"
+          onClick={() => {
+            navigator.clipboard.writeText(
+              `http://localhost:3000/post/${postId}`
+            );
+            dispatch(hideModal());
+          }}
+        />
+        <PostMenuItem label="Cancel" onClick={() => dispatch(hideModal())} />
+      </PostMenu>
+    );
+    dispatch(showModal("PostMenuModal", { children }));
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <UserLink username={user.username} />
-        <button className={styles.dot_button}>
+        <button className={styles.dot_button} onClick={openPostMenu}>
           <BsThreeDots />
         </button>
       </div>

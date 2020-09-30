@@ -1,0 +1,12 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 20rem;
+}
+
+.list > *:not(:last-child) {
+  border-bottom: 1px solid var(--darker-grey);
+}

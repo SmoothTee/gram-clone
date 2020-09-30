@@ -2,9 +2,11 @@ import React from "react";
 
 import { useTypedSelector } from "../../redux/hooks";
 import { CreatePostModal } from "./components/CreatePostModal";
+import { PostMenuModal } from "./components/PostMenuModal";
 
 const modalComponents = {
   CreatePostModal,
+  PostMenuModal,
 };
 
 export const ModalManager = () => {

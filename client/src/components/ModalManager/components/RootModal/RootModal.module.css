@@ -11,6 +11,10 @@
   outline: none;
 }
 
+.no_padding {
+  padding: 0;
+}
+
 .header {
   display: flex;
   justify-content: flex-end;
