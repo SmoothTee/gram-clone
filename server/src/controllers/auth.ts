@@ -11,11 +11,11 @@ export const register = catchError(async (req, res) => {
 });
 
 export const login = catchError(async (req, res) => {
-  const user = await authService.login(req.body);
+  const data = await authService.login(req.body);
 
-  req.session.userId = user.id;
+  req.session.userId = data.user.id;
 
-  res.json({ user });
+  res.json(data);
 });
 
 export const logout = catchError(async (req, res) => {

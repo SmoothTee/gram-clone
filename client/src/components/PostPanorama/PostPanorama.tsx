@@ -36,7 +36,7 @@ export const PostPanorama = ({ postId }: PostPanoramaProps) => {
       <MediaCarousel mediaIds={postMediaIds} />
       <div className={styles.info}>
         <div className={styles.header}>
-          <UserLink username={user.username} />
+          <UserLink userId={user.id} />
           <button className={styles.follow_button}>Follow</button>
           <button className={styles.dot_button}>
             <BsThreeDots />

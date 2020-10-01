@@ -25,6 +25,7 @@ import {
 import { AppThunk } from "../types";
 import { clientFetch } from "../../utils/clientFetch";
 import { resetError } from "../error/actions";
+import { Follower } from "../follower/types";
 
 const registerRequest = (): AuthActionTypes => ({
   type: REGISTER_REQUEST,
@@ -44,9 +45,10 @@ const loginRequest = (): AuthActionTypes => ({
   type: LOGIN_REQUEST,
 });
 
-const loginSuccess = (user: User): AuthActionTypes => ({
+const loginSuccess = (user: User, followers: Follower[]): AuthActionTypes => ({
   type: LOGIN_SUCCESS,
   user,
+  followers,
 });
 
 const loginFailure = (error: any): AuthActionTypes => ({
@@ -147,7 +149,7 @@ export const loginAction = <T>(body: T): AppThunk => async (dispatch) => {
     });
     if (success) {
       dispatch(resetError());
-      dispatch(loginSuccess(res.user));
+      dispatch(loginSuccess(res.user, res.followers));
     } else {
       dispatch(loginFailure(res));
     }

@@ -262,14 +262,24 @@ export const unsavePost = async (
   return unsavedPost;
 };
 
-export const readPost = async (post_id: number, session: Express.Session) => {
+export const readPost = async (
+  post_id: number,
+  session: Express.Session
+): Promise<{
+  post: Post;
+  users: UserWithoutPassword[];
+  postMedia: PostMedia[];
+  comments: PostComment[];
+}> => {
   const result = await db.transaction(async (trx) => {
     let postQuery = trx<Post>('post')
       .first(
         'post.*',
+        trx.raw('count(comment.id)::integer as num_of_comments'),
         trx.raw('case when l.count is null then 0 else l.count end as likes')
       )
-      .where('id', post_id)
+      .where('post.id', post_id)
+      .leftJoin('comment', 'comment.post_id', 'post.id')
       .leftJoin(
         trx<PostLike>('post_like')
           .select('post_id', trx.raw('count(*)::integer'))
@@ -277,7 +287,8 @@ export const readPost = async (post_id: number, session: Express.Session) => {
           .as('l'),
         'l.post_id',
         'post.id'
-      );
+      )
+      .groupBy('post.id', 'l.count', 'saved_post.user_id', 'pl.user_id');
 
     if (session && session.userId) {
       postQuery = postQuery
@@ -311,7 +322,7 @@ export const readPost = async (post_id: number, session: Express.Session) => {
         );
     }
 
-    const post = await postQuery;
+    const post = ((await postQuery) as unknown) as Post;
 
     let commentQuery = trx('comment')
       .select(
@@ -345,7 +356,7 @@ export const readPost = async (post_id: number, session: Express.Session) => {
         );
     }
 
-    const comments = await commentQuery;
+    const comments = (await commentQuery) as PostComment[];
 
     const cUserIds = (comments as PostComment[]).map((c) => c.user_id);
     const uniqueUserIds = [...new Set(cUserIds.concat(post.user_id))];

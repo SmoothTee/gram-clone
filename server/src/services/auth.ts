@@ -9,6 +9,7 @@ import { userSerializer } from '../utils/serializer';
 import { config } from '../config';
 import { sendEmail } from '../utils/sendEmail';
 import { FORGOT_PASSWORD_PREFIX } from '../constants';
+import { Follower } from './follower';
 
 const redis = new Redis();
 
@@ -71,7 +72,9 @@ interface LoginData {
   password: string;
 }
 
-export const login = async (data: LoginData): Promise<UserWithoutPassword> => {
+export const login = async (
+  data: LoginData
+): Promise<{ user: UserWithoutPassword; followers: Follower[] }> => {
   const { usernameOrEmail, password } = data;
   const user = await db<User>('user')
     .first()
@@ -89,7 +92,11 @@ export const login = async (data: LoginData): Promise<UserWithoutPassword> => {
     });
   }
 
-  return userSerializer(user);
+  const followers = await db<Follower>('follower')
+    .select()
+    .where('follower_id', user.id);
+
+  return { user: userSerializer(user), followers };
 };
 
 export const me = async (userId: number): Promise<UserWithoutPassword> => {

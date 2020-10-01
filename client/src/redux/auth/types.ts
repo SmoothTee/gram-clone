@@ -1,3 +1,4 @@
+import { Follower } from "../follower/types";
 import {
   REGISTER_REQUEST,
   LOGOUT_SUCCESS,
@@ -67,6 +68,7 @@ interface LoginRequestAction {
 interface LoginSuccessAction {
   type: typeof LOGIN_SUCCESS;
   user: User;
+  followers: Follower[];
 }
 
 interface LoginFailureAction {

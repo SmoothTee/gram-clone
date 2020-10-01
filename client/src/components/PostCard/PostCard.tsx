@@ -67,7 +67,7 @@ export const PostCard = ({ postId }: PostCardProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <UserLink username={user.username} />
+        <UserLink userId={user.id} />
         <button className={styles.dot_button} onClick={openPostMenu}>
           <BsThreeDots />
         </button>

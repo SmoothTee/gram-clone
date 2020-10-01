@@ -15,7 +15,9 @@ export const readProfile = async (
     const user = await trx<User>('public.user')
       .first(
         'public.user.*',
-        'p.num_of_posts',
+        trx.raw(
+          'CASE WHEN p.num_of_posts IS NULL THEN 0 ELSE p.num_of_posts END'
+        ),
         trx.raw(
           'CASE WHEN f.num_of_followers IS NULL THEN 0 ELSE f.num_of_followers END'
         ),

@@ -14,3 +14,10 @@
 .posts > *:not(:last-child) {
   margin-bottom: 3rem;
 }
+
+.sidebar {
+  position: sticky;
+  top: var(--header-height);
+  height: 100%;
+  padding: 1rem;
+}
