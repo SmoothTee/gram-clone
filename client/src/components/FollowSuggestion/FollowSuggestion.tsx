@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import styles from "./FollowSuggestion.module.css";
 import { Button } from "../Button";
 import { useTypedSelector } from "../../redux/hooks";
-import { followAction } from "../../redux/follower/actions";
+import { followAction, unfollowAction } from "../../redux/follower/actions";
 
 interface FollowSuggestionProps {
   userId: number;
@@ -20,6 +20,10 @@ export const FollowSuggestion = ({ userId }: FollowSuggestionProps) => {
 
   const user = users.byId[userId];
 
+  const followed = followerById[sessionId as number]
+    ? followerById[sessionId as number].items.some((f) => f.user_id === userId)
+    : false;
+
   const avatar = user.avatar_url
     ? user.avatar_url
     : "https://avatars.dicebear.com/api/male/john.svg?mood[]=happy";
@@ -31,7 +35,13 @@ export const FollowSuggestion = ({ userId }: FollowSuggestionProps) => {
         {user.username}
       </Link>
       <span className={styles.full_name}>{user.full_name}</span>
-      <Button onClick={() => dispatch(followAction(user.id))}>Follow</Button>
+      {followed ? (
+        <Button onClick={() => dispatch(unfollowAction(user.id))}>
+          Following
+        </Button>
+      ) : (
+        <Button onClick={() => dispatch(followAction(user.id))}>Follow</Button>
+      )}
     </div>
   );
 };

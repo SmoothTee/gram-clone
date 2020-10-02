@@ -15,3 +15,12 @@ export const follow = catchError(async (req, res) => {
 
   res.json({ follower });
 });
+
+export const unfollow = catchError(async (req, res) => {
+  const follower = await followerService.unfollow(
+    req.body.userId,
+    req.session.userId
+  );
+
+  res.json({ follower });
+});

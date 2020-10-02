@@ -43,3 +43,17 @@ export const follow = async (
 
   return follower;
 };
+
+export const unfollow = async (
+  user_id: number,
+  follower_id: number
+): Promise<Follower> => {
+  const follower = (
+    await db<Follower>('follower')
+      .del()
+      .where({ user_id, follower_id })
+      .returning('*')
+  )[0];
+
+  return follower;
+};

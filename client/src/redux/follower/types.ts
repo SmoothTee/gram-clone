@@ -6,6 +6,9 @@ import {
   READ_FOLLOWER_SUGGESTIONS_FAILURE,
   READ_FOLLOWER_SUGGESTIONS_REQUEST,
   READ_FOLLOWER_SUGGESTIONS_SUCCESS,
+  UNFOLLOW_FAILURE,
+  UNFOLLOW_REQUEST,
+  UNFOLLOW_SUCCESS,
 } from "./constants";
 
 export interface Follower {
@@ -16,7 +19,7 @@ export interface Follower {
 }
 
 export interface UserFollowers {
-  items: number[];
+  items: Follower[];
   isFetching: boolean;
   cursor: string | null;
 }
@@ -64,10 +67,27 @@ interface FollowFailureAction {
   error: any;
 }
 
+interface UnfollowRequestAction {
+  type: typeof UNFOLLOW_REQUEST;
+}
+
+interface UnfollowSuccessAction {
+  type: typeof UNFOLLOW_SUCCESS;
+  follower: Follower;
+}
+
+interface UnfollowFailureAction {
+  type: typeof UNFOLLOW_FAILURE;
+  error: any;
+}
+
 export type FollowerActionTypes =
   | ReadFollowerSuggestionsRequestAction
   | ReadFollowerSuggestionsSuccessAction
   | ReadFollowerSuggestionsFailureAction
   | FollowRequestAction
   | FollowSuccessAction
-  | FollowFailureAction;
+  | FollowFailureAction
+  | UnfollowRequestAction
+  | UnfollowSuccessAction
+  | UnfollowFailureAction;

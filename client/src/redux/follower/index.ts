@@ -1,6 +1,10 @@
 import { LOGIN_SUCCESS } from "../auth/constants";
 import { ActionTypes } from "../types";
-import { FOLLOW_SUCCESS, READ_FOLLOWER_SUGGESTIONS_SUCCESS } from "./constants";
+import {
+  FOLLOW_SUCCESS,
+  READ_FOLLOWER_SUGGESTIONS_SUCCESS,
+  UNFOLLOW_SUCCESS,
+} from "./constants";
 import {
   FollowerActionTypes,
   FollowerState,
@@ -23,6 +27,20 @@ const userFollowers = (
       return {
         ...state,
         items: action.followers,
+      };
+    case FOLLOW_SUCCESS:
+      return {
+        ...state,
+        items: state.items.concat(action.follower),
+      };
+    case UNFOLLOW_SUCCESS:
+      return {
+        ...state,
+        items: state.items.filter(
+          (f) =>
+            f.user_id !== action.follower.user_id &&
+            f.follower_id !== action.follower.follower_id
+        ),
       };
     default:
       return state;
@@ -48,6 +66,7 @@ export const follower = (state = initialState, action: ActionTypes) => {
         },
       };
     case FOLLOW_SUCCESS:
+    case UNFOLLOW_SUCCESS:
       return {
         ...state,
         byFollowerId: {
