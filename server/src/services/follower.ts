@@ -26,3 +26,20 @@ export const suggestions = async (
 
   return users.map(userSerializer);
 };
+
+export const follow = async (
+  user_id: number,
+  follower_id: number
+): Promise<Follower> => {
+  const follower = (
+    await db<Follower>('follower').insert(
+      {
+        user_id,
+        follower_id,
+      },
+      '*'
+    )
+  )[0];
+
+  return follower;
+};

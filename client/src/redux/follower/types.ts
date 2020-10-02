@@ -1,5 +1,8 @@
 import { User } from "../auth/types";
 import {
+  FOLLOW_FAILURE,
+  FOLLOW_REQUEST,
+  FOLLOW_SUCCESS,
   READ_FOLLOWER_SUGGESTIONS_FAILURE,
   READ_FOLLOWER_SUGGESTIONS_REQUEST,
   READ_FOLLOWER_SUGGESTIONS_SUCCESS,
@@ -47,7 +50,24 @@ interface ReadFollowerSuggestionsFailureAction {
   error: any;
 }
 
+interface FollowRequestAction {
+  type: typeof FOLLOW_REQUEST;
+}
+
+interface FollowSuccessAction {
+  type: typeof FOLLOW_SUCCESS;
+  follower: Follower;
+}
+
+interface FollowFailureAction {
+  type: typeof FOLLOW_FAILURE;
+  error: any;
+}
+
 export type FollowerActionTypes =
   | ReadFollowerSuggestionsRequestAction
   | ReadFollowerSuggestionsSuccessAction
-  | ReadFollowerSuggestionsFailureAction;
+  | ReadFollowerSuggestionsFailureAction
+  | FollowRequestAction
+  | FollowSuccessAction
+  | FollowFailureAction;

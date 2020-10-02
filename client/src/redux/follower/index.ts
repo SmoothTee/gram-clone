@@ -1,6 +1,6 @@
 import { LOGIN_SUCCESS } from "../auth/constants";
 import { ActionTypes } from "../types";
-import { READ_FOLLOWER_SUGGESTIONS_SUCCESS } from "./constants";
+import { FOLLOW_SUCCESS, READ_FOLLOWER_SUGGESTIONS_SUCCESS } from "./constants";
 import {
   FollowerActionTypes,
   FollowerState,
@@ -43,6 +43,17 @@ export const follower = (state = initialState, action: ActionTypes) => {
           ...state.byFollowerId,
           [action.user.id]: userFollowers(
             state.byFollowerId[action.user.id],
+            action
+          ),
+        },
+      };
+    case FOLLOW_SUCCESS:
+      return {
+        ...state,
+        byFollowerId: {
+          ...state.byFollowerId,
+          [action.follower.follower_id]: userFollowers(
+            state.byFollowerId[action.follower.follower_id],
             action
           ),
         },
