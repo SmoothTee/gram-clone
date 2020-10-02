@@ -1,6 +1,12 @@
 import { LOGIN_SUCCESS } from "../auth/constants";
 import { ActionTypes } from "../types";
-import { FollowerState, UserFollowers } from "./types";
+import { READ_FOLLOWER_SUGGESTIONS_SUCCESS } from "./constants";
+import {
+  FollowerActionTypes,
+  FollowerState,
+  FollowerSuggestionsState,
+  UserFollowers,
+} from "./types";
 
 const userFollowersInitialState: UserFollowers = {
   items: [],
@@ -40,6 +46,31 @@ export const follower = (state = initialState, action: ActionTypes) => {
             action
           ),
         },
+      };
+    default:
+      return state;
+  }
+};
+
+const followerSuggestionsInitialState: FollowerSuggestionsState = {
+  items: [],
+  isFetching: false,
+  cursor: null,
+};
+
+export const followerSuggestions = (
+  state = followerSuggestionsInitialState,
+  action: FollowerActionTypes
+) => {
+  switch (action.type) {
+    case READ_FOLLOWER_SUGGESTIONS_SUCCESS:
+      return {
+        ...state,
+        items: [
+          ...new Set(
+            state.items.concat(action.followerSuggestions.map((u) => u.id))
+          ),
+        ],
       };
     default:
       return state;

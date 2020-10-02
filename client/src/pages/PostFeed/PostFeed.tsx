@@ -4,6 +4,7 @@ import { Layout } from "../../components/Layout";
 import { PostCard } from "../../components/PostCard";
 import { Suggestions } from "../../components/Suggestions";
 import { UserLink } from "../../components/UserLink";
+import { readFollowerSuggestionsAction } from "../../redux/follower/actions";
 import { useTypedSelector } from "../../redux/hooks";
 import { readPostsAction } from "../../redux/post/actions";
 
@@ -18,6 +19,7 @@ export const PostFeed = () => {
 
   useEffect(() => {
     dispatch(readPostsAction());
+    dispatch(readFollowerSuggestionsAction());
   }, []);
 
   if (isFetching) {

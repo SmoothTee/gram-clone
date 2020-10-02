@@ -6,6 +6,7 @@ import { AuthActionTypes } from "./auth/types";
 import { UserActionTypes } from "./user/types";
 import { PostActionTypes } from "./post/types";
 import { CommentActionTypes } from "./comment/types";
+import { FollowerActionTypes } from "./follower/types";
 
 export type AppReducerParameters = Parameters<typeof appReducer>;
 
@@ -22,4 +23,5 @@ export type ActionTypes =
   | AuthActionTypes
   | UserActionTypes
   | PostActionTypes
-  | CommentActionTypes;
+  | CommentActionTypes
+  | FollowerActionTypes;

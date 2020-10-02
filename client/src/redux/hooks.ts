@@ -7,6 +7,7 @@ import { EntityState } from "./entities/types";
 import { PostMediaState } from "./postMedia/types";
 import { CommentState } from "./comment/types";
 import { UserState } from "./user/types";
+import { FollowerState, FollowerSuggestionsState } from "./follower/types";
 
 interface RootState {
   modal: ModalState;
@@ -17,6 +18,8 @@ interface RootState {
   postFeed: PostsState;
   postMedia: PostMediaState;
   commentsByPostId: { [key: number]: CommentState };
+  follower: FollowerState;
+  followerSuggestions: FollowerSuggestionsState;
   entities: EntityState;
   error: any;
 }
