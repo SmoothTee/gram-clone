@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import styles from "./Profile.module.css";
@@ -14,6 +14,7 @@ import { PostQuadrat } from "../../components/PostQuadrat/PostQuadrat";
 
 export const Profile = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const { username } = useParams<{ username: string }>();
 
@@ -22,10 +23,17 @@ export const Profile = () => {
     (state) => state.profileByUsername
   );
   const postsByUsername = useTypedSelector((state) => state.postsByUsername);
+  const sessionId = useTypedSelector((state) => state.auth.session);
 
   useEffect(() => {
     dispatch(readProfileAction(username));
   }, []);
+
+  useEffect(() => {
+    if (location.pathname === `/profile/${username}/saved`) {
+      dispatch(readSavedPostsAction());
+    }
+  }, [location.pathname]);
 
   const profile = profileByUsername[username];
 
@@ -46,7 +54,7 @@ export const Profile = () => {
               <img className={styles.avatar} src={avatarUrl} alt="avatar" />
               <div className={styles.header}>
                 <span className={styles.username}>{user.username}</span>
-                <Button>Follow</Button>
+                {sessionId === user.id ? null : <Button>Follow</Button>}
               </div>
               <div className={styles.numbers}>
                 <span className={styles.fact}>
@@ -68,15 +76,19 @@ export const Profile = () => {
                 <BsGrid3X3 />
                 <span>Posts</span>
               </TabItem>
-              <TabItem path={`/profile/${username}/saved`}>
-                <BsBookmark />
-                <span>Saved</span>
-              </TabItem>
+              {sessionId === user.id ? (
+                <TabItem path={`/profile/${username}/saved`}>
+                  <BsBookmark />
+                  <span>Saved</span>
+                </TabItem>
+              ) : null}
             </Tab>
             <div className={styles.post_grid}>
-              {postIds.map((pId) => (
-                <PostQuadrat key={pId} postId={pId} />
-              ))}
+              {location.pathname === `/profile/${username}/saved` ? (
+                <span>Saved Posts</span>
+              ) : (
+                postIds.map((pId) => <PostQuadrat key={pId} postId={pId} />)
+              )}
             </div>
           </div>
         </div>

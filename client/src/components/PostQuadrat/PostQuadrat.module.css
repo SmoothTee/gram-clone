@@ -46,9 +46,12 @@
   cursor: pointer;
 }
 
-.likes,
-.comments {
+.text {
   display: flex;
   align-items: center;
   color: var(--white);
+}
+
+.icon {
+  margin-right: 0.1rem;
 }

@@ -10,7 +10,7 @@ export const Suggestions = () => {
   return (
     <div className={styles.container}>
       {userIds.map((uId) => (
-        <FollowSuggestion userId={uId} />
+        <FollowSuggestion key={uId} userId={uId} />
       ))}
     </div>
   );

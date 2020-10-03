@@ -11,6 +11,7 @@ import { CenterBox } from "../../components/CenterBox";
 import { Input } from "../../components/Input";
 import { forgotPasswordAction } from "../../redux/auth/actions";
 import { useTypedSelector } from "../../redux/hooks";
+import { Logo } from "../../components/Logo";
 
 interface IFormInputs {
   email: string;
@@ -38,7 +39,7 @@ export const ForgotPassword = () => {
 
   return (
     <CenterBox>
-      <h2>Forgot Password</h2>
+      <Logo />
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <Input
           label="Email"

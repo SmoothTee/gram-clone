@@ -374,3 +374,55 @@ export const readPost = async (
 
   return result;
 };
+
+export const readSavedPosts = async (userId: number) => {
+  const results = await db.transaction(async (trx) => {
+    const saved_posts = await trx<SavedPost>('saved_post')
+      .select()
+      .where({ user_id: userId });
+
+    const postIds = saved_posts.map((sp) => sp.post_id);
+
+    const posts = await trx<Post>('post')
+      .select(
+        'post.*',
+        trx.raw(
+          'CASE WHEN c.num_of_comments IS NULL THEN 0 ELSE c.num_of_comments END'
+        ),
+        trx.raw('CASE WHEN l.likes IS NULL THEN 0 ELSE l.likes END')
+      )
+      .whereIn('post.id', postIds)
+      .leftJoin(
+        trx<PostComment>('comment')
+          .select('post_id', trx.raw('count(*)::integer as num_of_comments'))
+          .groupBy('post_id')
+          .as('c'),
+        'c.post_id',
+        'post.id'
+      )
+      .leftJoin(
+        trx<PostLike>('post_like')
+          .select('post_id', trx.raw('count(*)::integer as likes'))
+          .groupBy('post_id')
+          .as('l'),
+        'l.post_id',
+        'post.id'
+      );
+
+    const postMedia = await trx<PostMedia>('post_media')
+      .with(
+        'cte',
+        trx.raw(
+          'select *, ROW_NUMBER() OVER (PARTITION BY post_id ORDER BY created_at DESC) as rn from post_media'
+        )
+      )
+      .select('cte.*')
+      .from('cte')
+      .where('rn', 1)
+      .whereIn('post_id', postIds);
+
+    return { saved_posts, posts, postMedia };
+  });
+
+  return results;
+};

@@ -62,3 +62,9 @@ export const readPost = catchError(async (req, res) => {
 
   res.json(result);
 });
+
+export const readSavedPosts = catchError(async (req, res) => {
+  const result = await postService.readSavedPosts(req.session.userId);
+
+  res.json(result);
+});
