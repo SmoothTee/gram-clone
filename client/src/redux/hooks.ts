@@ -2,7 +2,7 @@ import { useSelector, TypedUseSelectorHook } from "react-redux";
 
 import { ModalState } from "./modal/types";
 import { AuthState } from "./auth/types";
-import { PostsState, PostState } from "./post/types";
+import { PostsState, PostState, SavedPostsState } from "./post/types";
 import { EntityState } from "./entities/types";
 import { PostMediaState } from "./postMedia/types";
 import { CommentState } from "./comment/types";
@@ -17,6 +17,7 @@ interface RootState {
   post: PostState;
   postFeed: PostsState;
   postMedia: PostMediaState;
+  savedPosts: SavedPostsState;
   commentsByPostId: { [key: number]: CommentState };
   follower: FollowerState;
   followerSuggestions: FollowerSuggestionsState;

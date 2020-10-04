@@ -8,6 +8,8 @@ import {
   READ_POST_FAILURE,
   READ_POST_REQUEST,
   READ_POST_SUCCESS,
+  READ_SAVED_POSTS_REQUEST,
+  READ_SAVED_POSTS_SUCCESS,
 } from "./constants";
 import { PostActionTypes, PostState } from "./types";
 
@@ -73,6 +75,34 @@ export const post = (state = postInitialState, action: PostActionTypes) => {
       };
     case READ_POST_FAILURE:
       return postInitialState;
+    default:
+      return state;
+  }
+};
+
+const savedPostsInitialState = {
+  items: [],
+  isFetching: false,
+  lastUpdated: null,
+};
+
+export const savedPosts = (
+  state = savedPostsInitialState,
+  action: PostActionTypes
+) => {
+  switch (action.type) {
+    case READ_SAVED_POSTS_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case READ_SAVED_POSTS_SUCCESS:
+      return {
+        ...state,
+        items: action.savedPosts,
+        isFetching: false,
+        lastUpdated: new Date(),
+      };
     default:
       return state;
   }

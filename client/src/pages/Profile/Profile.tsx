@@ -11,6 +11,7 @@ import { Tab } from "../../components/Tab";
 import { TabItem } from "../../components/Tab/components/TabItem";
 import { BsBookmark, BsGrid3X3 } from "react-icons/bs";
 import { PostQuadrat } from "../../components/PostQuadrat/PostQuadrat";
+import { readSavedPostsAction } from "../../redux/post/actions";
 
 export const Profile = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ export const Profile = () => {
   );
   const postsByUsername = useTypedSelector((state) => state.postsByUsername);
   const sessionId = useTypedSelector((state) => state.auth.session);
+  const savedPosts = useTypedSelector((state) => state.savedPosts.items);
 
   useEffect(() => {
     dispatch(readProfileAction(username));
@@ -84,11 +86,11 @@ export const Profile = () => {
               ) : null}
             </Tab>
             <div className={styles.post_grid}>
-              {location.pathname === `/profile/${username}/saved` ? (
-                <span>Saved Posts</span>
-              ) : (
-                postIds.map((pId) => <PostQuadrat key={pId} postId={pId} />)
-              )}
+              {location.pathname === `/profile/${username}/saved`
+                ? savedPosts.map((sp) => (
+                    <PostQuadrat key={sp.post_id} postId={sp.post_id} />
+                  ))
+                : postIds.map((pId) => <PostQuadrat key={pId} postId={pId} />)}
             </div>
           </div>
         </div>

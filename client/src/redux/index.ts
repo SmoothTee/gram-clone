@@ -4,7 +4,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import { auth } from "./auth";
 import { profileByUsername, postsByUsername } from "./user";
 import { modal } from "./modal";
-import { post, postFeed } from "./post";
+import { post, postFeed, savedPosts } from "./post";
 import { postMedia } from "./postMedia";
 import { commentsByPostId } from "./comment";
 import { follower, followerSuggestions } from "./follower";
@@ -21,6 +21,7 @@ export const appReducer = combineReducers({
   postFeed,
   postMedia,
   postsByUsername,
+  savedPosts,
   commentsByPostId,
   follower,
   followerSuggestions,

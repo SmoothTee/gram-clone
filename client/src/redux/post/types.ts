@@ -22,6 +22,9 @@ import {
   READ_POST_REQUEST,
   READ_POST_SUCCESS,
   READ_POST_FAILURE,
+  READ_SAVED_POSTS_FAILURE,
+  READ_SAVED_POSTS_REQUEST,
+  READ_SAVED_POSTS_SUCCESS,
 } from "./constants";
 
 export interface Post {
@@ -68,6 +71,12 @@ export interface PostState {
 export interface PostsState {
   items: number[];
   isCreating?: boolean;
+  isFetching: boolean;
+  lastUpdated: string | null;
+}
+
+export interface SavedPostsState {
+  items: SavedPost[];
   isFetching: boolean;
   lastUpdated: string | null;
 }
@@ -177,6 +186,22 @@ interface ReadPostFailureAction {
   error: any;
 }
 
+interface ReadSavedPostsRequestAction {
+  type: typeof READ_SAVED_POSTS_REQUEST;
+}
+
+interface ReadSavedPostsSuccessAction {
+  type: typeof READ_SAVED_POSTS_SUCCESS;
+  savedPosts: SavedPost[];
+  posts: Post[];
+  postMedia: PostMedia[];
+}
+
+interface ReadSavedPostsFailureAction {
+  type: typeof READ_SAVED_POSTS_FAILURE;
+  error: any;
+}
+
 export type PostActionTypes =
   | CreatePostRequestAction
   | CreatePostSuccessAction
@@ -198,4 +223,7 @@ export type PostActionTypes =
   | UnsavePostFailureAction
   | ReadPostRequestAction
   | ReadPostSuccessAction
-  | ReadPostFailureAction;
+  | ReadPostFailureAction
+  | ReadSavedPostsRequestAction
+  | ReadSavedPostsSuccessAction
+  | ReadSavedPostsFailureAction;

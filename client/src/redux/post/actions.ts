@@ -23,6 +23,9 @@ import {
   UNSAVE_POST_FAILURE,
   UNSAVE_POST_REQUEST,
   UNSAVE_POST_SUCCESS,
+  READ_SAVED_POSTS_REQUEST,
+  READ_SAVED_POSTS_SUCCESS,
+  READ_SAVED_POSTS_FAILURE,
 } from "./constants";
 import { PostActionTypes, Post, PostMedia, PostLike, SavedPost } from "./types";
 import { PostComment } from "../comment/types";
@@ -141,12 +144,32 @@ const readPostFailure = (error: any) => ({
   error,
 });
 
+const readSavedPostsRequest = (): PostActionTypes => ({
+  type: READ_SAVED_POSTS_REQUEST,
+});
+
+const readSavedPostsSuccess = (data: {
+  savedPosts: SavedPost[];
+  posts: Post[];
+  postMedia: PostMedia[];
+}): PostActionTypes => ({
+  type: READ_SAVED_POSTS_SUCCESS,
+  savedPosts: data.savedPosts,
+  posts: data.posts,
+  postMedia: data.postMedia,
+});
+
+const readSavedPostsFailure = (error: any) => ({
+  type: READ_SAVED_POSTS_FAILURE,
+  error,
+});
+
 export const createPostAction = (formData: FormData): AppThunk => async (
   dispatch
 ) => {
   try {
     dispatch(createPostRequest());
-    const { success, res } = await clientFetch(
+    const { success } = await clientFetch(
       "/api/post",
       {
         body: formData,
@@ -262,5 +285,19 @@ export const readPostAction = (postId: number): AppThunk => async (
     }
   } catch (err) {
     dispatch(readPostFailure(`Failed to read post: ${err}`));
+  }
+};
+
+export const readSavedPostsAction = (): AppThunk => async (dispatch) => {
+  try {
+    dispatch(readSavedPostsRequest());
+    const { success, res } = await clientFetch("/api/post/saved");
+    if (success) {
+      dispatch(readSavedPostsSuccess(res));
+    } else {
+      dispatch(readSavedPostsFailure(res));
+    }
+  } catch (err) {
+    dispatch(readSavedPostsFailure(`Failed to read saved posts: ${err}`));
   }
 };

@@ -377,11 +377,11 @@ export const readPost = async (
 
 export const readSavedPosts = async (userId: number) => {
   const results = await db.transaction(async (trx) => {
-    const saved_posts = await trx<SavedPost>('saved_post')
+    const savedPosts = await trx<SavedPost>('saved_post')
       .select()
       .where({ user_id: userId });
 
-    const postIds = saved_posts.map((sp) => sp.post_id);
+    const postIds = savedPosts.map((sp) => sp.post_id);
 
     const posts = await trx<Post>('post')
       .select(
@@ -421,7 +421,7 @@ export const readSavedPosts = async (userId: number) => {
       .where('rn', 1)
       .whereIn('post_id', postIds);
 
-    return { saved_posts, posts, postMedia };
+    return { savedPosts, posts, postMedia };
   });
 
   return results;

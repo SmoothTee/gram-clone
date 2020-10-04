@@ -6,6 +6,7 @@ import {
   LIKE_POST_SUCCESS,
   READ_POSTS_SUCCESS,
   READ_POST_SUCCESS,
+  READ_SAVED_POSTS_SUCCESS,
   SAVE_POST_SUCCESS,
   UNLIKE_POST_SUCCESS,
   UNSAVE_POST_SUCCESS,
@@ -179,6 +180,7 @@ const posts = (state = postInitialState, action: ActionTypes) => {
         },
       };
     case READ_PROFILE_SUCCESS:
+    case READ_SAVED_POSTS_SUCCESS:
       return {
         ...state,
         byId: {
@@ -201,6 +203,7 @@ const postMediaInitialState: EntityInitialState<PostMedia> = {
 const postMedia = (state = postMediaInitialState, action: ActionTypes) => {
   switch (action.type) {
     case READ_POSTS_SUCCESS:
+    case READ_SAVED_POSTS_SUCCESS:
       return {
         ...state,
         byId: {
