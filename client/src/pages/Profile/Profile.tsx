@@ -12,6 +12,7 @@ import { TabItem } from "../../components/Tab/components/TabItem";
 import { BsBookmark, BsGrid3X3 } from "react-icons/bs";
 import { PostQuadrat } from "../../components/PostQuadrat/PostQuadrat";
 import { readSavedPostsAction } from "../../redux/post/actions";
+import { showModal } from "../../redux/modal/actions";
 
 export const Profile = () => {
   const dispatch = useDispatch();
@@ -63,13 +64,37 @@ export const Profile = () => {
                   <b>{user.num_of_posts}</b> post
                   {user.num_of_posts === 1 ? "" : "s"}
                 </span>
-                <span className={styles.fact}>
-                  <b>{user.num_of_followers}</b> follower
-                  {user.num_of_followers === 1 ? "" : "s"}
-                </span>
-                <span className={styles.fact}>
-                  <b>{user.num_of_followings}</b> following
-                </span>
+                <button
+                  className={styles.button}
+                  onClick={() =>
+                    dispatch(
+                      showModal("FollowerModal", {
+                        title: "Follower",
+                        userIds: [1, 2, 3, 4],
+                      })
+                    )
+                  }
+                >
+                  <span className={styles.fact}>
+                    <b>{user.num_of_followers}</b> follower
+                    {user.num_of_followers === 1 ? "" : "s"}
+                  </span>
+                </button>
+                <button
+                  className={styles.button}
+                  onClick={() =>
+                    dispatch(
+                      showModal("FollowerModal", {
+                        title: "Following",
+                        userIds: [1, 2, 3, 4],
+                      })
+                    )
+                  }
+                >
+                  <span className={styles.fact}>
+                    <b>{user.num_of_followings}</b> following
+                  </span>
+                </button>
               </div>
               <span className={styles.full_name}>{user.full_name}</span>
             </div>

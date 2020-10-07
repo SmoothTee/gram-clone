@@ -361,9 +361,47 @@ export const readPost = async (
     const cUserIds = (comments as PostComment[]).map((c) => c.user_id);
     const uniqueUserIds = [...new Set(cUserIds.concat(post.user_id))];
 
-    const users = (
-      await trx<User>('public.user').select().whereIn('id', uniqueUserIds)
-    ).map(userSerializer);
+    const users = await trx<User>('public.user')
+      .select(
+        'public.user.*',
+        trx.raw(
+          'CASE WHEN p.num_of_posts IS NULL THEN 0 ELSE p.num_of_posts END'
+        ),
+        trx.raw(
+          'CASE WHEN f.num_of_followers IS NULL THEN 0 ELSE f.num_of_followers END'
+        ),
+        trx.raw(
+          'CASE WHEN fing.num_of_followings IS NULL THEN 0 ELSE fing.num_of_followings END'
+        )
+      )
+      .whereIn('id', uniqueUserIds)
+      .leftJoin(
+        trx('post')
+          .select('user_id', trx.raw('count(*)::integer as num_of_posts'))
+          .groupBy('user_id')
+          .as('p'),
+        'p.user_id',
+        'public.user.id'
+      )
+      .leftJoin(
+        trx('follower')
+          .select('user_id', trx.raw('count(*)::integer as num_of_followers'))
+          .groupBy('user_id')
+          .as('f'),
+        'f.user_id',
+        'public.user.id'
+      )
+      .leftJoin(
+        trx('follower')
+          .select(
+            'follower_id',
+            trx.raw('count(*)::integer as num_of_followings')
+          )
+          .groupBy('follower_id')
+          .as('fing'),
+        'fing.follower_id',
+        'public.user.id'
+      );
 
     const postMedia = await trx<PostMedia>('post_media')
       .select()

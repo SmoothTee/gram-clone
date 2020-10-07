@@ -1,5 +1,4 @@
 import { db } from '../database';
-import { follower } from '../routes/follower';
 import { userSerializer } from '../utils/serializer';
 import { User, UserWithoutPassword } from './auth';
 
@@ -56,4 +55,18 @@ export const unfollow = async (
   )[0];
 
   return follower;
+};
+
+export const readFollowers = async (user_id: number): Promise<Follower[]> => {
+  const followers = await db<Follower>('follower').select().where({ user_id });
+
+  return followers;
+};
+
+export const readFollowings = async (user_id: number): Promise<Follower[]> => {
+  const followings = await db<Follower>('follower')
+    .select()
+    .where({ follower_id: user_id });
+
+  return followings;
 };

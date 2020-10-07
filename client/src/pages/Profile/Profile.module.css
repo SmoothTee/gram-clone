@@ -53,6 +53,19 @@
   margin-right: 2rem;
 }
 
+.button {
+  background: none;
+  border: none;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.fact {
+  font-size: 1rem;
+}
+
 .username {
   font-size: 2rem;
 }

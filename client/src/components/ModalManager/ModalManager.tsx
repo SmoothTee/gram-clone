@@ -4,11 +4,13 @@ import { useTypedSelector } from "../../redux/hooks";
 import { CreatePostModal } from "./components/CreatePostModal";
 import { PostMenuModal } from "./components/PostMenuModal";
 import { PostModal } from "./components/PostModal";
+import { FollowerModal } from "./components/FollowerModal";
 
 const modalComponents = {
   CreatePostModal,
   PostMenuModal,
   PostModal,
+  FollowerModal,
 };
 
 export const ModalManager = () => {

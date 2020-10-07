@@ -14,7 +14,7 @@ export const sendEmail = async (to: string, text: string): Promise<void> => {
     from: 'gram@no-reply.com',
     subject: 'Gram: Forgot Password',
     to,
-    text,
+    html: text,
   });
 
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>

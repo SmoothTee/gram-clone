@@ -1,7 +1,7 @@
 import { followerService } from '../services';
 import { catchError } from '../utils';
 
-export const suggestions = catchError(async (req, res) => {
+export const readSuggestions = catchError(async (req, res) => {
   const suggestions = await followerService.suggestions(req.session.userId);
 
   res.json({ suggestions });
@@ -23,4 +23,16 @@ export const unfollow = catchError(async (req, res) => {
   );
 
   res.json({ follower });
+});
+
+export const readFollowers = catchError(async (req, res) => {
+  const followers = await followerService.readFollowers(req.session.userId);
+
+  res.json({ followers });
+});
+
+export const readFollowings = catchError(async (req, res) => {
+  const followings = await followerService.readFollowings(req.session.userId);
+
+  res.json({ followings });
 });
