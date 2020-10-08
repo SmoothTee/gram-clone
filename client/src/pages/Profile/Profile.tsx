@@ -13,6 +13,7 @@ import { BsBookmark, BsGrid3X3 } from "react-icons/bs";
 import { PostQuadrat } from "../../components/PostQuadrat/PostQuadrat";
 import { readSavedPostsAction } from "../../redux/post/actions";
 import { showModal } from "../../redux/modal/actions";
+import { readFollowersAction } from "../../redux/follower/actions";
 
 export const Profile = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,9 @@ export const Profile = () => {
   const postsByUsername = useTypedSelector((state) => state.postsByUsername);
   const sessionId = useTypedSelector((state) => state.auth.session);
   const savedPosts = useTypedSelector((state) => state.savedPosts.items);
+  const followersByUserId = useTypedSelector(
+    (state) => state.follower.byUserId
+  );
 
   useEffect(() => {
     dispatch(readProfileAction(username));
@@ -48,6 +52,9 @@ export const Profile = () => {
       ? user.avatar_url
       : "https://avatars.dicebear.com/api/male/john.svg?mood[]=happy";
     const postIds = postsByUsername[username].items;
+    const followers = followersByUserId[user.id]
+      ? followersByUserId[user.id].items
+      : [];
 
     return (
       <Layout>
@@ -69,8 +76,10 @@ export const Profile = () => {
                   onClick={() =>
                     dispatch(
                       showModal("FollowerModal", {
-                        title: "Follower",
-                        userIds: [1, 2, 3, 4],
+                        title: "Followers",
+                        placeholder: "You have no followers.",
+                        userIds: followers,
+                        cb: () => dispatch(readFollowersAction(user.id)),
                       })
                     )
                   }
@@ -87,6 +96,7 @@ export const Profile = () => {
                       showModal("FollowerModal", {
                         title: "Following",
                         userIds: [1, 2, 3, 4],
+                        cb: () => dispatch(readFollowersAction(user.id)),
                       })
                     )
                   }

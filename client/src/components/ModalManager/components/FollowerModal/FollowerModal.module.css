@@ -1,0 +1,14 @@
+.header {
+  border-bottom: 1px solid var(--darker-grey);
+  padding: 1rem;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.list {
+  padding: 1rem;
+  margin: 0;
+  list-style-type: none;
+}

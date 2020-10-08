@@ -11,6 +11,9 @@ import {
   UNFOLLOW_FAILURE,
   UNFOLLOW_REQUEST,
   UNFOLLOW_SUCCESS,
+  READ_FOLLOWERS_REQUEST,
+  READ_FOLLOWERS_SUCCESS,
+  READ_FOLLOWERS_FAILURE,
 } from "./constants";
 import { Follower, FollowerActionTypes } from "./types";
 
@@ -56,6 +59,33 @@ const unfollowSuccess = (follower: Follower): FollowerActionTypes => ({
 const unfollowFailure = (error: any): FollowerActionTypes => ({
   type: UNFOLLOW_FAILURE,
   error,
+});
+
+const readFollowersRequest = (userId: number): FollowerActionTypes => ({
+  type: READ_FOLLOWERS_REQUEST,
+  userId,
+});
+
+const readFollowersSuccess = (
+  data: {
+    followers: Follower[];
+    users: User[];
+  },
+  userId: number
+): FollowerActionTypes => ({
+  type: READ_FOLLOWERS_SUCCESS,
+  userId,
+  followers: data.followers,
+  users: data.users,
+});
+
+const readFollowersFailure = (
+  error: any,
+  userId: number
+): FollowerActionTypes => ({
+  type: READ_FOLLOWERS_FAILURE,
+  error,
+  userId,
 });
 
 export const readFollowerSuggestionsAction = (): AppThunk => async (
@@ -109,5 +139,21 @@ export const unfollowAction = (userId: number): AppThunk => async (
     }
   } catch (err) {
     dispatch(unfollowFailure(`Failed to unfollow: ${err}`));
+  }
+};
+
+export const readFollowersAction = (userId: number): AppThunk => async (
+  dispatch
+) => {
+  try {
+    dispatch(readFollowersRequest(userId));
+    const { success, res } = await clientFetch(`/api/follower/${userId}`);
+    if (success) {
+      dispatch(readFollowersSuccess(res, userId));
+    } else {
+      dispatch(readFollowersFailure(res, userId));
+    }
+  } catch (err) {
+    dispatch(readFollowersFailure(`Failed to read followers: ${err}`, userId));
   }
 };

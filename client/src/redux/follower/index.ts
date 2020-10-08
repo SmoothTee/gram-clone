@@ -2,6 +2,7 @@ import { LOGIN_SUCCESS } from "../auth/constants";
 import { ActionTypes } from "../types";
 import {
   FOLLOW_SUCCESS,
+  READ_FOLLOWERS_SUCCESS,
   READ_FOLLOWER_SUGGESTIONS_SUCCESS,
   UNFOLLOW_SUCCESS,
 } from "./constants";
@@ -42,6 +43,12 @@ const userFollowers = (
             f.follower_id !== action.follower.follower_id
         ),
       };
+    case READ_FOLLOWERS_SUCCESS:
+      return {
+        ...state,
+        items: action.followers,
+        isFetching: false,
+      };
     default:
       return state;
   }
@@ -75,6 +82,14 @@ export const follower = (state = initialState, action: ActionTypes) => {
             state.byFollowerId[action.follower.follower_id],
             action
           ),
+        },
+      };
+    case READ_FOLLOWERS_SUCCESS:
+      return {
+        ...state,
+        byUserId: {
+          ...state.byUserId,
+          [action.userId]: userFollowers(state.byUserId[action.userId], action),
         },
       };
     default:

@@ -27,7 +27,10 @@ import {
   REGISTER_SUCCESS,
   RESET_PASSWORD_SUCCESS,
 } from "../auth/constants";
-import { READ_FOLLOWER_SUGGESTIONS_SUCCESS } from "../follower/constants";
+import {
+  READ_FOLLOWERS_SUCCESS,
+  READ_FOLLOWER_SUGGESTIONS_SUCCESS,
+} from "../follower/constants";
 
 const userInitialState: EntityInitialState<User> = {
   byId: {},
@@ -48,17 +51,8 @@ const users = (state = userInitialState, action: ActionTypes) => {
         },
       };
     case READ_POSTS_SUCCESS:
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          ...action.users.reduce<{ [key: number]: User }>((acc, curr) => {
-            acc[curr.id] = curr;
-            return acc;
-          }, {}),
-        },
-      };
     case READ_POST_SUCCESS:
+    case READ_FOLLOWERS_SUCCESS:
       return {
         ...state,
         byId: {
@@ -69,6 +63,7 @@ const users = (state = userInitialState, action: ActionTypes) => {
           }, {}),
         },
       };
+
     case READ_PROFILE_SUCCESS:
     case UPDATE_USER_SUCCESS:
       return {

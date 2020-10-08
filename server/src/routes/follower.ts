@@ -5,8 +5,12 @@ import { protect } from '../middlewares';
 
 const router = Router();
 
-router.get('/', protect, followerController.readFollowers);
-router.get('/followings', protect, followerController.readFollowings);
+router.get('/:user_id', protect, followerController.readFollowers);
+router.get(
+  '/followings/:follower_id',
+  protect,
+  followerController.readFollowings
+);
 router.get('/suggestions', protect, followerController.readSuggestions);
 router.post('/follow', protect, followerController.follow);
 router.post('/unfollow', protect, followerController.unfollow);

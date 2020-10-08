@@ -26,13 +26,17 @@ export const unfollow = catchError(async (req, res) => {
 });
 
 export const readFollowers = catchError(async (req, res) => {
-  const followers = await followerService.readFollowers(req.session.userId);
+  const result = await followerService.readFollowers(
+    Number(req.params.user_id)
+  );
 
-  res.json({ followers });
+  res.json(result);
 });
 
 export const readFollowings = catchError(async (req, res) => {
-  const followings = await followerService.readFollowings(req.session.userId);
+  const result = await followerService.readFollowings(
+    Number(req.params.follower_id)
+  );
 
-  res.json({ followings });
+  res.json(result);
 });

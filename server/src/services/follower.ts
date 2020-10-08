@@ -57,16 +57,32 @@ export const unfollow = async (
   return follower;
 };
 
-export const readFollowers = async (user_id: number): Promise<Follower[]> => {
+export const readFollowers = async (
+  user_id: number
+): Promise<{ followers: Follower[]; users: UserWithoutPassword[] }> => {
   const followers = await db<Follower>('follower').select().where({ user_id });
 
-  return followers;
+  const followerIds = followers.map((f) => f.follower_id);
+
+  const users = await db<User>('public.user')
+    .select()
+    .whereIn('id', followerIds);
+
+  return { followers, users: users.map(userSerializer) };
 };
 
-export const readFollowings = async (user_id: number): Promise<Follower[]> => {
+export const readFollowings = async (
+  follower_id: number
+): Promise<{ followings: Follower[]; users: UserWithoutPassword[] }> => {
   const followings = await db<Follower>('follower')
     .select()
-    .where({ follower_id: user_id });
+    .where({ follower_id });
 
-  return followings;
+  const followingIds = followings.map((f) => f.user_id);
+
+  const users = await db<User>('public.user')
+    .select()
+    .whereIn('id', followingIds);
+
+  return { followings, users: users.map(userSerializer) };
 };
