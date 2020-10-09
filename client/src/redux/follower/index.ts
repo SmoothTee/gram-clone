@@ -4,6 +4,7 @@ import {
   FOLLOW_SUCCESS,
   READ_FOLLOWERS_SUCCESS,
   READ_FOLLOWER_SUGGESTIONS_SUCCESS,
+  READ_FOLLOWINGS_SUCCESS,
   UNFOLLOW_SUCCESS,
 } from "./constants";
 import {
@@ -49,6 +50,12 @@ const userFollowers = (
         items: action.followers,
         isFetching: false,
       };
+    case READ_FOLLOWINGS_SUCCESS:
+      return {
+        ...state,
+        items: action.followings,
+        isFetching: false,
+      };
     default:
       return state;
   }
@@ -90,6 +97,17 @@ export const follower = (state = initialState, action: ActionTypes) => {
         byUserId: {
           ...state.byUserId,
           [action.userId]: userFollowers(state.byUserId[action.userId], action),
+        },
+      };
+    case READ_FOLLOWINGS_SUCCESS:
+      return {
+        ...state,
+        byFollowerId: {
+          ...state.byFollowerId,
+          [action.userId]: userFollowers(
+            state.byFollowerId[action.userId],
+            action
+          ),
         },
       };
     default:

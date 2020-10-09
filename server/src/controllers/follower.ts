@@ -26,6 +26,7 @@ export const unfollow = catchError(async (req, res) => {
 });
 
 export const readFollowers = catchError(async (req, res) => {
+  console.log('Pep', req.params);
   const result = await followerService.readFollowers(
     Number(req.params.user_id)
   );

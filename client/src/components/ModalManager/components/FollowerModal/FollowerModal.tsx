@@ -1,25 +1,42 @@
 import React, { useEffect } from "react";
+
+import styles from "./FollowerModal.module.css";
+import { useTypedSelector } from "../../../../redux/hooks";
 import { FollowSuggestion } from "../../../FollowSuggestion";
 import { RootModal } from "../RootModal";
 
-import styles from "./FollowerModal.module.css";
-
 interface FollowerModalProps {
+  userId: number;
   title: string;
   placeholder: string;
-  userIds: number[];
   cb: () => void;
 }
 
 export const FollowerModal = ({
+  userId,
   title,
   placeholder,
-  userIds,
   cb,
 }: FollowerModalProps) => {
+  const follower = useTypedSelector((state) => state.follower);
+
+  const followers = follower.byUserId[userId]
+    ? follower.byUserId[userId].items.map((f) => f.follower_id)
+    : [];
+  const followings = follower.byFollowerId[userId]
+    ? follower.byFollowerId[userId].items.map((f) => f.user_id)
+    : [];
+
   useEffect(() => {
     cb();
   }, []);
+
+  let userIds;
+  if (title === "Followers") {
+    userIds = followers;
+  } else {
+    userIds = followings;
+  }
 
   return (
     <RootModal blank={true}>

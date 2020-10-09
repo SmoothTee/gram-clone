@@ -12,3 +12,8 @@
   margin: 0;
   list-style-type: none;
 }
+
+.placeholder {
+  font-style: italic;
+  font-size: 0.8rem;
+}

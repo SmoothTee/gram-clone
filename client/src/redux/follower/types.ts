@@ -12,6 +12,9 @@ import {
   READ_FOLLOWERS_REQUEST,
   READ_FOLLOWERS_SUCCESS,
   READ_FOLLOWERS_FAILURE,
+  READ_FOLLOWINGS_FAILURE,
+  READ_FOLLOWINGS_REQUEST,
+  READ_FOLLOWINGS_SUCCESS,
 } from "./constants";
 
 export interface Follower {
@@ -102,6 +105,24 @@ interface ReadFollowersFailureAction {
   userId: number;
 }
 
+interface ReadFollowingsRequestAction {
+  type: typeof READ_FOLLOWINGS_REQUEST;
+  userId: number;
+}
+
+interface ReadFollowingsSuccessAction {
+  type: typeof READ_FOLLOWINGS_SUCCESS;
+  followings: Follower[];
+  users: User[];
+  userId: number;
+}
+
+interface ReadFollowingsFailureAction {
+  type: typeof READ_FOLLOWINGS_FAILURE;
+  error: any;
+  userId: number;
+}
+
 export type FollowerActionTypes =
   | ReadFollowerSuggestionsRequestAction
   | ReadFollowerSuggestionsSuccessAction
@@ -114,4 +135,7 @@ export type FollowerActionTypes =
   | UnfollowFailureAction
   | ReadFollowersRequestAction
   | ReadFollowersSuccessAction
-  | ReadFollowersFailureAction;
+  | ReadFollowersFailureAction
+  | ReadFollowingsRequestAction
+  | ReadFollowingsSuccessAction
+  | ReadFollowingsFailureAction;

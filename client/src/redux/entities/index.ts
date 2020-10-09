@@ -30,6 +30,7 @@ import {
 import {
   READ_FOLLOWERS_SUCCESS,
   READ_FOLLOWER_SUGGESTIONS_SUCCESS,
+  READ_FOLLOWINGS_SUCCESS,
 } from "../follower/constants";
 
 const userInitialState: EntityInitialState<User> = {
@@ -53,6 +54,7 @@ const users = (state = userInitialState, action: ActionTypes) => {
     case READ_POSTS_SUCCESS:
     case READ_POST_SUCCESS:
     case READ_FOLLOWERS_SUCCESS:
+    case READ_FOLLOWINGS_SUCCESS:
       return {
         ...state,
         byId: {

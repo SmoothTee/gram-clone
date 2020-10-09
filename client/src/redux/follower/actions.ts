@@ -14,6 +14,9 @@ import {
   READ_FOLLOWERS_REQUEST,
   READ_FOLLOWERS_SUCCESS,
   READ_FOLLOWERS_FAILURE,
+  READ_FOLLOWINGS_FAILURE,
+  READ_FOLLOWINGS_REQUEST,
+  READ_FOLLOWINGS_SUCCESS,
 } from "./constants";
 import { Follower, FollowerActionTypes } from "./types";
 
@@ -88,6 +91,33 @@ const readFollowersFailure = (
   userId,
 });
 
+const readFollowingsRequest = (userId: number): FollowerActionTypes => ({
+  type: READ_FOLLOWINGS_REQUEST,
+  userId,
+});
+
+const readFollowingsSuccess = (
+  data: {
+    followings: Follower[];
+    users: User[];
+  },
+  userId: number
+): FollowerActionTypes => ({
+  type: READ_FOLLOWINGS_SUCCESS,
+  userId,
+  followings: data.followings,
+  users: data.users,
+});
+
+const readFollowingsFailure = (
+  error: any,
+  userId: number
+): FollowerActionTypes => ({
+  type: READ_FOLLOWINGS_FAILURE,
+  error,
+  userId,
+});
+
 export const readFollowerSuggestionsAction = (): AppThunk => async (
   dispatch
 ) => {
@@ -155,5 +185,25 @@ export const readFollowersAction = (userId: number): AppThunk => async (
     }
   } catch (err) {
     dispatch(readFollowersFailure(`Failed to read followers: ${err}`, userId));
+  }
+};
+
+export const readFollowingsAction = (userId: number): AppThunk => async (
+  dispatch
+) => {
+  try {
+    dispatch(readFollowingsRequest(userId));
+    const { success, res } = await clientFetch(
+      `/api/follower/followings/${userId}`
+    );
+    if (success) {
+      dispatch(readFollowingsSuccess(res, userId));
+    } else {
+      dispatch(readFollowingsFailure(res, userId));
+    }
+  } catch (err) {
+    dispatch(
+      readFollowingsFailure(`Failed to read followings: ${err}`, userId)
+    );
   }
 };
